@@ -52,7 +52,7 @@ public class HomeController implements Initializable {
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if (sortBtn.getText().equals("Sort (asc)")) {
+            if(sortBtn.getText().equals("Sort (asc)") || sortBtn.getText().equals("Sort")) {
                 // TODO sort observableMovies ascending a-z
                 sortMoviesAscending(observableMovies);
                 sortBtn.setText("Sort (desc)");
@@ -63,12 +63,48 @@ public class HomeController implements Initializable {
             }
         });
 
-        searchBtn.setOnAction(actionEvent -> {
-            String query = searchField.getText();
-            Genre selectedGenre = (Genre) genreComboBox.getValue();
-            observableMovies.setAll(filterMovies(query, selectedGenre));
+        searchBtn.setOnAction(actionEvent -> { //click on search button
+            observableMovies.clear();
+            observableMovies.addAll(allMovies);
+            if (genreComboBox.getValue() != null)
+            {
+                filterMovies(observableMovies, searchField.getText(), genreComboBox.getValue().toString());
+
+                if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
+                    sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
+                } else if(sortBtn.getText().equals("Sort (desc)")){
+                    sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
+                }
+                //else stick with no order
+            }
         });
 
+    }
+    public void filterMovies(ObservableList<Movie> allMovies, String searchText, String genre) {
+
+        List<Movie> filtermovies = new ArrayList<>(); //list of movies with filter options
+        for (Movie m : allMovies) {
+            if(searchText != null) //if searchtext equals null, we are only filter after genre
+            {
+                searchText = searchText.trim(); //trim the spaces after the last char example: "the    " -> "the"
+                if(!searchText.equals(" ")){ //if the searchtext is only spaces "     " it will be reduced to " " by trim
+                    if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
+                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && m.getGenres().contains(genre))
+                    {
+                        filtermovies.add(m);
+                    }
+                }
+            }
+            else
+            {
+                if(m.getGenres().contains(genre))
+                {
+                    filtermovies.add(m);
+                }
+            }
+        }
+        allMovies.clear();
+        allMovies.addAll(filtermovies);
     }
 
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
@@ -85,7 +121,6 @@ public class HomeController implements Initializable {
         Collections.sort(allMovies, titlecomapre);
         */
     }
-
     public void sortMoviesDescending(ObservableList<Movie> allMovies) {
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
     }
