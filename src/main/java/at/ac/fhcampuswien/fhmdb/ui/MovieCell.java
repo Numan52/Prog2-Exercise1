@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class MovieCell extends ListCell<Movie> {
+
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genres = new Label();
@@ -17,10 +18,13 @@ public class MovieCell extends ListCell<Movie> {
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {
+
         super.updateItem(movie, empty);
 
         if (empty || movie == null) {
             setText(null);
+            setGraphic(null);
+
         } else {
             this.getStyleClass().add("movie-cell");
             title.setText(movie.getTitle());

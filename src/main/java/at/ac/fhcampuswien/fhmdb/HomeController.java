@@ -13,10 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HomeController implements Initializable {
     @FXML
@@ -65,8 +62,34 @@ public class HomeController implements Initializable {
             }
         });
 
+        searchBtn.setOnAction(actionEvent -> { //click on search button
+            observableMovies.clear();
+            observableMovies.addAll(allMovies);
+            if (genreComboBox.getValue() != null)
+            {
+                filterMovies(observableMovies, searchField.getText(), genreComboBox.getValue().toString());
+            }
+
+        });
 
     }
+    public void filterMovies(ObservableList<Movie> allMovies, String searchText, String genre) {
+
+        List<Movie> filtermovies = new ArrayList<>();
+        for (Movie m : allMovies) {
+            if(searchText != null)
+            {
+                if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
+                m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && m.getGenres().contains(genre))
+                {
+                    filtermovies.add(m);
+                }
+            }
+        }
+        allMovies.clear();
+        allMovies.addAll(filtermovies);
+    }
+
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
         allMovies.sort(Comparator.comparing(Movie::getTitle));
 
