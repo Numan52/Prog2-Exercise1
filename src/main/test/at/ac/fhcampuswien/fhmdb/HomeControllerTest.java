@@ -41,7 +41,7 @@ class HomeControllerTest {
         String genre = Genre.ALL_GENRES.toString();
 
         // Act
-        controller.filterMovies(allMovies, searchText, genre);
+        controller.filterMovies(allMovies, searchText, Genre.valueOf(genre));
 
         // Assert
         assertEquals(3, allMovies.size());
@@ -57,7 +57,7 @@ class HomeControllerTest {
         String searchText = "witch";
         String genre = Genre.HORROR.toString();
 
-        controller.filterMovies(allMovies, searchText, genre);
+        controller.filterMovies(allMovies, searchText, Genre.valueOf(genre));
 
         assertEquals(allMovies.get(0).getTitle(), "Blair Witch");
     }
