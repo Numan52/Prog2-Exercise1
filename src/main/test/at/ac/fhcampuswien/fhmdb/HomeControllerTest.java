@@ -19,15 +19,13 @@ class HomeControllerTest {
     {
         //given
         HomeController homeController = new HomeController();
-        List<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("Dragon","skr", Arrays.asList(Genre.ACTION,Genre.COMEDY))); //d
-        movies.add(new Movie("Akanda","skr", Arrays.asList(Genre.ACTION,Genre.FAMILY))); //a
         ObservableList<Movie> allmovies = FXCollections.observableArrayList();
-        allmovies.addAll(movies);
+        allmovies.add(new Movie("Dragon","skr", Arrays.asList(Genre.ACTION,Genre.COMEDY))); //d
+        allmovies.add(new Movie("Akanda","skr", Arrays.asList(Genre.ACTION,Genre.FAMILY))); //a
         //when
         homeController.sortMoviesAscending(allmovies);
         //then
-        assertEquals("Akanda",allmovies.get(0).getTitle()); //a
-        assertEquals("Dragon",allmovies.get(1).getTitle()); //d
+        assertEquals("Akanda", allmovies.get(0).getTitle()); //a
+        assertEquals("Dragon", allmovies.get(1).getTitle()); //d
     }
 }
