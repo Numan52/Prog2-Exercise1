@@ -21,6 +21,7 @@ public class Movie {
         return title;
     }
 
+
     public String getDescription() {
         return description;
     }
@@ -31,6 +32,7 @@ public class Movie {
             joiner.add(g.toString());
         }
         return joiner.toString();
+
     }
 
     public static List<Movie> initializeMovies(){

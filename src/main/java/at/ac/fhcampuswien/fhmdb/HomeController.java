@@ -13,10 +13,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -54,7 +52,7 @@ public class HomeController implements Initializable {
 
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
-            if(sortBtn.getText().equals("Sort (asc)")) {
+            if (sortBtn.getText().equals("Sort (asc)")) {
                 // TODO sort observableMovies ascending a-z
                 sortMoviesAscending(observableMovies);
                 sortBtn.setText("Sort (desc)");
@@ -65,8 +63,14 @@ public class HomeController implements Initializable {
             }
         });
 
+        searchBtn.setOnAction(actionEvent -> {
+            String query = searchField.getText();
+            Genre selectedGenre = (Genre) genreComboBox.getValue();
+            observableMovies.setAll(filterMovies(query, selectedGenre));
+        });
 
     }
+
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
         allMovies.sort(Comparator.comparing(Movie::getTitle));
 
@@ -81,8 +85,40 @@ public class HomeController implements Initializable {
         Collections.sort(allMovies, titlecomapre);
         */
     }
+
     public void sortMoviesDescending(ObservableList<Movie> allMovies) {
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
     }
 
+    public List<Movie> filterMovies(String query, Genre genre) {
+        List<Movie> filteredList = new ArrayList<>();
+
+        for (Movie movie : allMovies) {
+            String movieTitle = movie.getTitle().toLowerCase();
+            String movieDesctription = movie.getDescription().toLowerCase();
+
+            if ((query == null || movieTitle.contains(query.toLowerCase()) || movieDesctription.contains(query.toLowerCase())) &&
+               (genre == null || movie.getGenres().contains(genre.toString()) || genre == Genre.ALL_GENRES)){
+                    filteredList.add(movie);
+            }
+           /* if (query == null && movie.getGenres().contains(genre.toString())) {
+                filteredList.add(movie);
+            }
+
+            if (query != null ) {
+                String movieTitle = movie.getTitle().toLowerCase();
+                String movieDesctription = movie.getDescription().toLowerCase();
+
+                if (movieTitle.contains(query.toLowerCase()) || movieDesctription.contains(query.toLowerCase())) {
+                    if (movie.getGenres().contains(genre.toString()) || genre == Genre.ALL_GENRES){
+                        filteredList.add(movie);
+                    }
+                }
+            }
+
+        }*/
+
+        }
+        return filteredList;
+    }
 }
