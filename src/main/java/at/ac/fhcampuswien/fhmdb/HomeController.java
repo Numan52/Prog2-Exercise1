@@ -66,17 +66,19 @@ public class HomeController implements Initializable {
         searchBtn.setOnAction(actionEvent -> { //click on search button
             observableMovies.clear();
             observableMovies.addAll(allMovies);
-            if (genreComboBox.getValue() != null)
+            if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
             {
-                filterMovies(observableMovies, searchField.getText(), genreComboBox.getValue().toString());
-
-                if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
-                    sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
-                } else if(sortBtn.getText().equals("Sort (desc)")){
-                    sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
-                }
-                //else stick with no order
+                genreComboBox.setValue(Genre.ALL_GENRES);
             }
+            filterMovies(observableMovies, searchField.getText(), genreComboBox.getValue().toString());
+
+            if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
+                sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
+            } else if(sortBtn.getText().equals("Sort (desc)")){
+                sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
+            }
+            //else stick with no order
+
         });
 
     }
