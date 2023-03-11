@@ -15,11 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
 
     @Test
-    void test_test_test_test()
+    void given_an_list_with_movie_title_letter_d_first_and_a_later_correct_sorting_ascending_a_to_d()
     {
         //given
+        HomeController homeController = new HomeController();
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie("Dragon","skr", Arrays.asList(Genre.ACTION,Genre.COMEDY))); //d
+        movies.add(new Movie("Akanda","skr", Arrays.asList(Genre.ACTION,Genre.FAMILY))); //a
+        ObservableList<Movie> allmovies = FXCollections.observableArrayList();
+        allmovies.addAll(movies);
         //when
+        homeController.sortMoviesAscending(allmovies);
         //then
-
+        assertEquals("Akanda",allmovies.get(0).getTitle()); //a
+        assertEquals("Dragon",allmovies.get(1).getTitle()); //d
     }
 }
