@@ -89,7 +89,7 @@ public class HomeController implements Initializable {
                 searchText = searchText.trim(); //trim the spaces after the last char example: "the    " -> "the"
                 if(!searchText.equals(" ")){ //if the searchtext is only spaces "     " it will be reduced to " " by trim
                     if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
-                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && m.getGenres().contains(genre))
+                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && m.getGenres().contains(genre) || genre.equals("ALL_GENRES"))
                     {
                         filtermovies.add(m);
                     }
@@ -97,7 +97,7 @@ public class HomeController implements Initializable {
             }
             else
             {
-                if(m.getGenres().contains(genre))
+                if(m.getGenres().contains(genre) || genre.equals("ALL_GENRES"))
                 {
                     filtermovies.add(m);
                 }
@@ -123,37 +123,5 @@ public class HomeController implements Initializable {
     }
     public void sortMoviesDescending(ObservableList<Movie> allMovies) {
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-    }
-
-    public List<Movie> filterMovies(String query, Genre genre) {
-        List<Movie> filteredList = new ArrayList<>();
-
-        for (Movie movie : allMovies) {
-            String movieTitle = movie.getTitle().toLowerCase();
-            String movieDesctription = movie.getDescription().toLowerCase();
-
-            if ((query == null || movieTitle.contains(query.toLowerCase()) || movieDesctription.contains(query.toLowerCase())) &&
-               (genre == null || movie.getGenres().contains(genre.toString()) || genre == Genre.ALL_GENRES)){
-                    filteredList.add(movie);
-            }
-           /* if (query == null && movie.getGenres().contains(genre.toString())) {
-                filteredList.add(movie);
-            }
-
-            if (query != null ) {
-                String movieTitle = movie.getTitle().toLowerCase();
-                String movieDesctription = movie.getDescription().toLowerCase();
-
-                if (movieTitle.contains(query.toLowerCase()) || movieDesctription.contains(query.toLowerCase())) {
-                    if (movie.getGenres().contains(genre.toString()) || genre == Genre.ALL_GENRES){
-                        filteredList.add(movie);
-                    }
-                }
-            }
-
-        }*/
-
-        }
-        return filteredList;
     }
 }
