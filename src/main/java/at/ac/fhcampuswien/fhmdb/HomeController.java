@@ -70,7 +70,7 @@ public class HomeController implements Initializable {
             {
                 genreComboBox.setValue(Genre.ALL_GENRES);
             }
-            filterMovies(observableMovies, searchField.getText(), genreComboBox.getValue().toString());
+            filterMovies(observableMovies, searchField.getText(), (Genre) genreComboBox.getValue());
 
             if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
                 sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
@@ -82,8 +82,12 @@ public class HomeController implements Initializable {
         });
 
     }
-    public void filterMovies(ObservableList<Movie> allMovies, String searchText, String genre) {
+    public void filterMovies(ObservableList<Movie> allMovies, String searchText, Genre genre) {
 
+        if(genre == null)
+        {
+            genre = Genre.ALL_GENRES;
+        }
         List<Movie> filtermovies = new ArrayList<>(); //list of movies with filter options
         for (Movie m : allMovies) {
             if(searchText != null) //if searchtext equals null, we are only filter after genre
@@ -91,7 +95,7 @@ public class HomeController implements Initializable {
                 searchText = searchText.trim(); //trim the spaces after the last char example: "the    " -> "the"
                 if(!searchText.equals(" ")){ //if the searchtext is only spaces "     " it will be reduced to " " by trim
                     if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
-                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && (m.getGenres().contains(genre) || genre.equals("ALL_GENRES")))
+                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && (m.getGenres().contains(genre.toString()) || genre.equals(Genre.ALL_GENRES)))
                     {
                         filtermovies.add(m);
                     }
@@ -99,7 +103,7 @@ public class HomeController implements Initializable {
             }
             else
             {
-                if(m.getGenres().contains(genre) || genre.equals("ALL_GENRES"))
+                if(m.getGenres().contains(genre.toString()) || genre.equals(Genre.ALL_GENRES))
                 {
                     filtermovies.add(m);
                 }
