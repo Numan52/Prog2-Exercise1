@@ -89,7 +89,7 @@ public class HomeController implements Initializable {
                 searchText = searchText.trim(); //trim the spaces after the last char example: "the    " -> "the"
                 if(!searchText.equals(" ")){ //if the searchtext is only spaces "     " it will be reduced to " " by trim
                     if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
-                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && m.getGenres().contains(genre) || genre.equals("ALL_GENRES"))
+                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && (m.getGenres().contains(genre) || genre.equals("ALL_GENRES")))
                     {
                         filtermovies.add(m);
                     }
