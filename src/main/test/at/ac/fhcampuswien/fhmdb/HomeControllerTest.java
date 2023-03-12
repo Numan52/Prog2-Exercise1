@@ -91,4 +91,20 @@ class HomeControllerTest {
         assertEquals("Free Guy",allMovies.get(0).getTitle());
     }
 
+    @Test
+    void testFilterMovies_Genre_ascending(){
+        //given
+        HomeController controller = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList(
+                new Movie("Divergent", "Description A", Arrays.asList(Genre.ADVENTURE, Genre.MYSTERY, Genre.ACTION)),
+                new Movie("Titanic", "Description B", Arrays.asList(Genre.DRAMA, Genre.ROMANCE)),
+                new Movie("Avengers: Infinity War","Description C", Arrays.asList(Genre.ADVENTURE, Genre.ACTION)));
+        String searchText = null;
+        Genre genre = Genre.ADVENTURE;
+        //when
+        controller.sortMoviesAscending(allmovies, searchText, genre);
+        //then
+        assertEquals("Avengers: Infinity War", allmovies.get(0).getTitle());
+        assertEquals("Divergent", allmovies.get(1).getTitle());
+    }
 }
