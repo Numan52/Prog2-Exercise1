@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
 
     @Test
-    void given_an_list_with_movie_title_letter_d_first_and_a_later_correct_sorting_ascending_a_to_d()
+    void list_with_movie_title_letter_d_first_and_a_later_correct_sorting_ascending_a_to_d()
     {
         //given
         HomeController homeController = new HomeController();
@@ -30,7 +30,7 @@ class HomeControllerTest {
     }
     @Test
     void testFilterMovies_noSearchText_allGenres() {
-        // Arrange
+        //given
         HomeController controller = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
                 new Movie("King Kong = best movie", "Description A", Arrays.asList(Genre.ACTION, Genre.ADVENTURE, Genre.THRILLER)),
@@ -39,26 +39,24 @@ class HomeControllerTest {
 
         String searchText = null;
         String genre = Genre.ALL_GENRES.toString();
-
-        // Act
+        //when
         controller.filterMovies(allMovies, searchText, Genre.valueOf(genre));
-
-        // Assert
+        //then
         assertEquals(3, allMovies.size());
     }
     @Test
     void testFilterMovies_searchText_Horror_Genre(){
+        //given
         HomeController controller = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
                 new Movie("Blair Witch", "Description A", Arrays.asList(Genre.HORROR, Genre.MYSTERY, Genre.THRILLER)),
                 new Movie("Free Guy", "Description B", Arrays.asList(Genre.COMEDY, Genre.ADVENTURE)),
                 new Movie("Avengers: Infinity War","Description C", Arrays.asList(Genre.THRILLER, Genre.ACTION)));
-
         String searchText = "witch";
         String genre = Genre.HORROR.toString();
-
+        //when
         controller.filterMovies(allMovies, searchText, Genre.valueOf(genre));
-
+        //then
         assertEquals(allMovies.get(0).getTitle(), "Blair Witch");
     }
 }
