@@ -44,18 +44,21 @@ public class Movie {
                         "soon learning they're all trapped in a maze that will require him to join " +
                         "forces with fellow runners for a shot at escape.",
                 Arrays.asList(Genre.ACTION,Genre.MYSTERY,Genre.SCIENCE_FICTION)));
+
         movies.add(new Movie(
                 "Avengers: Infinity War",
                 "The Avengers and their allies must be willing to sacrifice all in an attempt " +
                         "to defeat the powerful Thanos before his blitz of devastation and ruin puts " +
                         "an end to the universe.",
                 Arrays.asList(Genre.ADVENTURE,Genre.ACTION)));
+
         movies.add(new Movie(
                 "Divergent",
                 "In a world divided by factions based on virtues, Tris learns she's Divergent " +
                         "and won't fit in. When she discovers a plot to destroy Divergents, Tris and the " +
                         "mysterious Four must find out what makes Divergents dangerous before it's too late.",
                 Arrays.asList(Genre.ADVENTURE,Genre.ACTION,Genre.MYSTERY)));
+
         movies.add(new Movie(
                 "Titanic",
                 "A seventeen-year-old aristocrat falls in love with a kind but poor " +

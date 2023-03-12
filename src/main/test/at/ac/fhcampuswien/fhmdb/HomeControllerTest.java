@@ -59,4 +59,5 @@ class HomeControllerTest {
         //then
         assertEquals(allMovies.get(0).getTitle(), "Blair Witch");
     }
+
 }
