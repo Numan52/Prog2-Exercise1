@@ -102,9 +102,9 @@ class HomeControllerTest {
         String searchText = null;
         Genre genre = Genre.ADVENTURE;
         //when
-        controller.sortMoviesAscending(allmovies, searchText, genre);
+        controller.sortMoviesAscending(allMovies, searchText, genre);
         //then
-        assertEquals("Avengers: Infinity War", allmovies.get(0).getTitle());
-        assertEquals("Divergent", allmovies.get(1).getTitle());
+        assertEquals("Avengers: Infinity War", allMovies.get(0).getTitle());
+        assertEquals("Divergent", allMovies.get(1).getTitle());
     }
 }
