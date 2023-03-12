@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
 
     @Test
-    void list_with_movie_title_letter_d_first_and_a_later_correct_sorting_ascending()
+    void descending_movielist_correct_sorting_ascending()
     {
         //given
         HomeController homeController = new HomeController();
@@ -30,7 +30,7 @@ class HomeControllerTest {
         assertEquals("Dragon", allmovies.get(1).getTitle()); //d
     }
     @Test
-    void list_with_movie_title_letter_a_first_and_m_later_correct_sorting_descending()
+    void ascending_movielist_correct_sorting_descending()
     {
         //given
         HomeController homeController = new HomeController();
@@ -44,9 +44,65 @@ class HomeControllerTest {
         assertEquals("A quiet place", allmovies.get(1).getTitle()); //a
     }
     @Test
+    void already_ascending_list_sorting_ascending_stays_same()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allmovies = FXCollections.observableArrayList();
+        allmovies.add(new Movie("Akanda","Text 1", Arrays.asList(Genre.ACTION,Genre.FAMILY)));
+        allmovies.add(new Movie("Dragon","Text 2", Arrays.asList(Genre.ACTION,Genre.COMEDY)));
+        //when
+        homeController.sortMoviesAscending(allmovies);
+        //then
+        assertEquals("Akanda", allmovies.get(0).getTitle());
+        assertEquals("Dragon", allmovies.get(1).getTitle());
+    }
+    @Test
+    void filter_list_after_seachtext_Fire_no_genre_finds_movie_with_Fire_in_description()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList(
+                new Movie("Blair Witch", "Description A", Arrays.asList(Genre.HORROR, Genre.MYSTERY, Genre.THRILLER)),
+                new Movie("Free Guy", "Description Fire", Arrays.asList(Genre.COMEDY, Genre.ADVENTURE)),
+                new Movie("Avengers: Infinity War","Description C", Arrays.asList(Genre.THRILLER, Genre.ACTION)));
+        String searchText = "fire";
+        Genre genre = null;
+        //when
+        homeController.filterMovies(allMovies, searchText, genre);
+        //then
+        assertTrue(allMovies.get(0).getDescription().contains("Fire"));
+        assertEquals(1,allMovies.size());
+    }
+
+    @Test
+    void filter_null_list_with_no_searchtext_and_no_genre_throw_exception_for_null_list()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = null;
+        String searchText = null;
+        Genre genre = null;
+        //when & then
+        assertThrowsExactly(NullPointerException.class, () -> homeController.filterMovies(allMovies,searchText,genre));
+    }
+
+    @Test
+    void filter_empty_list_with_searchtext_and_genre_allmovies_doesnt_throw_exception()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        String searchText = "A";
+        Genre genre = Genre.ALL_GENRES;
+        //when & then
+        assertDoesNotThrow(() -> homeController.filterMovies(allMovies, searchText, genre));
+    }
+
+    @Test
     void testFilterMovies_noSearchText_allGenres() {
         //given
-        HomeController controller = new HomeController();
+        HomeController homeController = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
                 new Movie("King Kong = best movie", "Description A", Arrays.asList(Genre.ACTION, Genre.ADVENTURE, Genre.THRILLER)),
                 new Movie("Movie B", "Description B", Arrays.asList(Genre.DRAMA, Genre.ROMANCE)),
@@ -55,14 +111,14 @@ class HomeControllerTest {
         String searchText = null;
         Genre genre = Genre.ALL_GENRES;
         //when
-        controller.filterMovies(allMovies, searchText, genre);
+        homeController.filterMovies(allMovies, searchText, genre);
         //then
         assertEquals(3, allMovies.size());
     }
     @Test
-    void testFilterMovies_with_searchText_of_movie_in_list_and_Genre_Horror(){
+    void testFilterMovies_searchText_part_of_movie_name_and_Genre_Horror_finds_exact_movie(){
         //given
-        HomeController controller = new HomeController();
+        HomeController homeController = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
                 new Movie("Blair Witch", "Description A", Arrays.asList(Genre.HORROR, Genre.MYSTERY, Genre.THRILLER)),
                 new Movie("Free Guy", "Description B", Arrays.asList(Genre.COMEDY, Genre.ADVENTURE)),
@@ -70,15 +126,16 @@ class HomeControllerTest {
         String searchText = "witch";
         Genre genre = Genre.HORROR;
         //when
-        controller.filterMovies(allMovies, searchText, genre);
+        homeController.filterMovies(allMovies, searchText, genre);
         //then
         assertEquals( "Blair Witch", allMovies.get(0).getTitle());
+        assertTrue(allMovies.get(0).getGenres().contains(Genre.HORROR.toString()));
     }
 
     @Test
-    void testFilterMovies_with_searchText_of_movie_in_list_with_No_Genre(){
+    void testFilterMovies_with_searchText_Free_with_Genre_null_finds_movie(){
         //given
-        HomeController controller = new HomeController();
+        HomeController homeController = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
                 new Movie("Blair Witch", "Description A", Arrays.asList(Genre.HORROR, Genre.MYSTERY, Genre.THRILLER)),
                 new Movie("Free Guy", "Description B", Arrays.asList(Genre.COMEDY, Genre.ADVENTURE)),
@@ -86,25 +143,9 @@ class HomeControllerTest {
         String searchText = "Free";
         Genre genre = null;
         //when
-        controller.filterMovies(allMovies, searchText, genre);
+        homeController.filterMovies(allMovies, searchText, genre);
         //then
         assertEquals("Free Guy",allMovies.get(0).getTitle());
     }
 
-    @Test
-    void testFilterMovies_Genre_ascending(){
-        //given
-        HomeController controller = new HomeController();
-        ObservableList<Movie> allMovies = FXCollections.observableArrayList(
-                new Movie("Divergent", "Description A", Arrays.asList(Genre.ADVENTURE, Genre.MYSTERY, Genre.ACTION)),
-                new Movie("Titanic", "Description B", Arrays.asList(Genre.DRAMA, Genre.ROMANCE)),
-                new Movie("Avengers: Infinity War","Description C", Arrays.asList(Genre.ADVENTURE, Genre.ACTION)));
-        String searchText = null;
-        Genre genre = Genre.ADVENTURE;
-        //when
-        controller.sortMoviesAscending(allMovies, searchText, genre);
-        //then
-        assertEquals("Avengers: Infinity War", allMovies.get(0).getTitle());
-        assertEquals("Divergent", allMovies.get(1).getTitle());
-    }
 }

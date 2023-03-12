@@ -83,34 +83,39 @@ public class HomeController implements Initializable {
 
     }
     public void filterMovies(ObservableList<Movie> allMovies, String searchText, Genre genre) {
-
-        if(genre == null)
+        if(allMovies == null)
         {
-            genre = Genre.ALL_GENRES;
+            throw new NullPointerException("List is null");
         }
-        List<Movie> filtermovies = new ArrayList<>(); //list of movies with filter options
-        for (Movie m : allMovies) {
-            if(searchText != null) //if searchtext equals null, we are only filter after genre
+        else {
+            if(genre == null)
             {
-                searchText = searchText.trim(); //trim the spaces after the last char example: "the    " -> "the"
-                if(!searchText.equals(" ")){ //if the searchtext is only spaces "     " it will be reduced to " " by trim
-                    if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
-                            m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && (m.getGenres().contains(genre.toString()) || genre.equals(Genre.ALL_GENRES)))
+                genre = Genre.ALL_GENRES;
+            }
+            List<Movie> filtermovies = new ArrayList<>(); //list of movies with filter options
+            for (Movie m : allMovies) {
+                if(searchText != null) //if searchtext equals null, we are only filter after genre
+                {
+                    searchText = searchText.trim(); //trim the spaces after the last char example: "the    " -> "the"
+                    if(!searchText.equals(" ")){ //if the searchtext is only spaces "     " it will be reduced to " " by trim
+                        if((m.getTitle().toLowerCase().contains(searchText.toLowerCase()) ||
+                                m.getDescription().toLowerCase().contains(searchText.toLowerCase())) && (m.getGenres().contains(genre.toString()) || genre.equals(Genre.ALL_GENRES)))
+                        {
+                            filtermovies.add(m);
+                        }
+                    }
+                }
+                else
+                {
+                    if(m.getGenres().contains(genre.toString()) || genre.equals(Genre.ALL_GENRES))
                     {
                         filtermovies.add(m);
                     }
                 }
             }
-            else
-            {
-                if(m.getGenres().contains(genre.toString()) || genre.equals(Genre.ALL_GENRES))
-                {
-                    filtermovies.add(m);
-                }
-            }
+            allMovies.clear();
+            allMovies.addAll(filtermovies);
         }
-        allMovies.clear();
-        allMovies.addAll(filtermovies);
     }
 
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
