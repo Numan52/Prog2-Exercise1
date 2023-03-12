@@ -119,6 +119,10 @@ public class HomeController implements Initializable {
     }
 
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
+        if(allMovies == null)
+        {
+            throw new NullPointerException("List is null");
+        }
         allMovies.sort(Comparator.comparing(Movie::getTitle));
 
         //First attempt
@@ -133,6 +137,12 @@ public class HomeController implements Initializable {
         */
     }
     public void sortMoviesDescending(ObservableList<Movie> allMovies) {
+        if(allMovies == null)
+        {
+            throw new NullPointerException("List is null");
+        }
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
     }
+
+    //could make sorting movies ascending und descending in one methode with second parameter true=ascending,false=descending TODO look at benefits
 }

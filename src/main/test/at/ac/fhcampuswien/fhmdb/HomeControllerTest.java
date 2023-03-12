@@ -16,6 +16,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
 
     @Test
+    void sort_null_movielist_ascending_throws_exception()
+    {
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = null;
+        //when & then
+        assertThrowsExactly(NullPointerException.class, () -> homeController.sortMoviesAscending(allMovies));
+    }
+
+    @Test
+    void sort_null_movielist_descending_throws_exception()
+    {
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = null;
+        //when & then
+        assertThrowsExactly(NullPointerException.class, () -> homeController.sortMoviesDescending(allMovies));
+    }
+    @Test
     void descending_movielist_correct_sorting_ascending()
     {
         //given
