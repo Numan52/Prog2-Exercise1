@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class HomeControllerTest {
 
     @Test
-    void list_with_movie_title_letter_d_first_and_a_later_correct_sorting_ascending_a_to_d()
+    void list_with_movie_title_letter_d_first_and_a_later_correct_sorting_ascending()
     {
         //given
         HomeController homeController = new HomeController();
         ObservableList<Movie> allmovies = FXCollections.observableArrayList();
-        allmovies.add(new Movie("Dragon","skr", Arrays.asList(Genre.ACTION,Genre.COMEDY))); //d
-        allmovies.add(new Movie("Akanda","skr", Arrays.asList(Genre.ACTION,Genre.FAMILY))); //a
+        allmovies.add(new Movie("Dragon","Text 1", Arrays.asList(Genre.ACTION,Genre.COMEDY))); //d
+        allmovies.add(new Movie("Akanda","Text 2", Arrays.asList(Genre.ACTION,Genre.FAMILY))); //a
         //when
         homeController.sortMoviesAscending(allmovies);
         //then
@@ -34,13 +35,13 @@ class HomeControllerTest {
         //given
         HomeController homeController = new HomeController();
         ObservableList<Movie> allmovies = FXCollections.observableArrayList();
-        allmovies.add(new Movie("A quiet place","skr", Arrays.asList(Genre.HORROR,Genre.ADVENTURE))); //a
-        allmovies.add(new Movie("M3GAN","skr", Arrays.asList(Genre.HORROR,Genre.THRILLER))); //m
+        allmovies.add(new Movie("A quiet place","Text 1", Arrays.asList(Genre.HORROR,Genre.ADVENTURE))); //a
+        allmovies.add(new Movie("M3GAN","Text 2", Arrays.asList(Genre.HORROR,Genre.THRILLER))); //m
         //when
-        homeController.sortMoviesAscending(allmovies);
+        homeController.sortMoviesDescending(allmovies);
         //then
-        assertEquals("M3GAN", allmovies.get(1).getTitle()); //m
-        assertEquals("A quiet place", allmovies.get(0).getTitle()); //a
+        assertEquals("M3GAN", allmovies.get(0).getTitle()); //m
+        assertEquals("A quiet place", allmovies.get(1).getTitle()); //a
     }
     @Test
     void testFilterMovies_noSearchText_allGenres() {
@@ -49,7 +50,7 @@ class HomeControllerTest {
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
                 new Movie("King Kong = best movie", "Description A", Arrays.asList(Genre.ACTION, Genre.ADVENTURE, Genre.THRILLER)),
                 new Movie("Movie B", "Description B", Arrays.asList(Genre.DRAMA, Genre.ROMANCE)),
-                new Movie("Movie C","Description C", Arrays.asList(Genre.THRILLER)));
+                new Movie("Movie C","Description C", Collections.singletonList(Genre.THRILLER)));
 
         String searchText = null;
         Genre genre = Genre.ALL_GENRES;
@@ -59,7 +60,7 @@ class HomeControllerTest {
         assertEquals(3, allMovies.size());
     }
     @Test
-    void testFilterMovies_searchText_Horror_Genre(){
+    void testFilterMovies_with_searchText_of_movie_in_list_and_Genre_Horror(){
         //given
         HomeController controller = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
@@ -71,11 +72,11 @@ class HomeControllerTest {
         //when
         controller.filterMovies(allMovies, searchText, genre);
         //then
-        assertEquals(allMovies.get(0).getTitle(), "Blair Witch");
+        assertEquals( "Blair Witch", allMovies.get(0).getTitle());
     }
 
     @Test
-    void testFilterMovies_searchText_with_No_Genre(){
+    void testFilterMovies_with_searchText_of_movie_in_list_with_No_Genre(){
         //given
         HomeController controller = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList(
@@ -87,7 +88,7 @@ class HomeControllerTest {
         //when
         controller.filterMovies(allMovies, searchText, genre);
         //then
-        assertEquals(allMovies.get(0).getTitle(), "Free Guy");
+        assertEquals("Free Guy",allMovies.get(0).getTitle());
     }
 
 }
