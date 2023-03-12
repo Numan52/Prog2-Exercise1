@@ -38,9 +38,9 @@ class HomeControllerTest {
                 new Movie("Movie C","Description C", Arrays.asList(Genre.THRILLER)));
 
         String searchText = null;
-        String genre = Genre.ALL_GENRES.toString();
+        Genre genre = Genre.ALL_GENRES;
         //when
-        controller.filterMovies(allMovies, searchText, Genre.valueOf(genre));
+        controller.filterMovies(allMovies, searchText, genre);
         //then
         assertEquals(3, allMovies.size());
     }
@@ -53,9 +53,9 @@ class HomeControllerTest {
                 new Movie("Free Guy", "Description B", Arrays.asList(Genre.COMEDY, Genre.ADVENTURE)),
                 new Movie("Avengers: Infinity War","Description C", Arrays.asList(Genre.THRILLER, Genre.ACTION)));
         String searchText = "witch";
-        String genre = Genre.HORROR.toString();
+        Genre genre = Genre.HORROR;
         //when
-        controller.filterMovies(allMovies, searchText, Genre.valueOf(genre));
+        controller.filterMovies(allMovies, searchText, genre);
         //then
         assertEquals(allMovies.get(0).getTitle(), "Blair Witch");
     }
