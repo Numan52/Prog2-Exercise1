@@ -1,5 +1,8 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +41,7 @@ public class Movie {
         List<Movie> movies = new ArrayList<>();
         //Add some dummy data here
 
+        MovieAPI.getAllMovies(null,Genre.ADVENTURE,null,null);
         movies.add(new Movie(
                 "The Maze Runner",
                 "Thomas is deposited in a community of boys after his memory is erased, " +
