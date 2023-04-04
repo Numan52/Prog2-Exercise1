@@ -13,46 +13,72 @@ import java.util.List;
 
 public class MovieAPI{
 
-    private final static String baseURL = "https://prog2.fh-campuswien.ac.at/movies";
+    private static final String BASE_URL = "https://prog2.fh-campuswien.ac.at/movies";
+
     private static final OkHttpClient client = new OkHttpClient();
 
     public static List<Movie> getAllMovies()
     {
-        return makeRequest(createURL(null,null,null,null));
+        return typecastJsonintoObjects(makeRequest(createURL(null,null,null,null,null)));
     }
     public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom)
     {
-       return makeRequest(createURL(query,genre,releaseYear,ratingFrom));
+       return typecastJsonintoObjects(makeRequest(createURL(query,genre,releaseYear,ratingFrom,null)));
+    }
+    public static Movie getOneMovie(String id)
+    {
+        return typecastJsonintoObject(makeRequest(createURL(null,null,null,null,id)));
     }
 
-    private static List<Movie> makeRequest(String url){
+    private static List<Movie> typecastJsonintoObjects(String responsebody)
+    {
+        try{
+            Gson gson = new Gson();
+            Movie[] movies = gson.fromJson(responsebody, Movie[].class);
+            return Arrays.asList(movies);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+    private static Movie typecastJsonintoObject(String responsebody)
+    {
+        try{
+            Gson gson = new Gson();
+            Movie movie = gson.fromJson(responsebody, Movie.class);
+            return movie;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    private static String makeRequest(String url){
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", "http.agent")
                 .build();
         try (Response response = client.newCall(request).execute()){
             String responsebody = response.body().string();
-            Gson gson = new Gson();
-            Movie[] movies = gson.fromJson(responsebody, Movie[].class);
-            return Arrays.asList(movies);
+            return responsebody;
         }
         catch (Exception e){
             System.err.println(e.getMessage());
         }
         return null;
     }
-    private static String createURL(String query, Genre genre, String releaseYear, String ratingFrom)
+    private static String createURL(String query, Genre genre, String releaseYear, String ratingFrom, String id)
     {
         StringBuilder newURL = new StringBuilder();
-        newURL.append(baseURL);
-        //String url = newURL.toString();
-        if((query != null && !query.trim().equals("")) || (genre != null && genre != Genre.ALL_GENRES) || releaseYear != null || ratingFrom != null)
+        newURL.append(BASE_URL);
+        if((query != null && !query.isBlank()) || (genre != null && genre != Genre.ALL_GENRES) || releaseYear != null || ratingFrom != null)
         {
             newURL.append("?");
             if(query != null && !query.trim().equals(""))
             {
                 query = URLEncoder.encode(query);
-                System.out.println(query);
                 newURL.append("query=").append(query).append("&");
             }
             if(genre != null && genre != Genre.ALL_GENRES)
@@ -67,9 +93,11 @@ public class MovieAPI{
             {
                 newURL.append("ratingFrom=").append(ratingFrom).append("&");
             }
-            //url = newURL.substring(0, newURL.length() - 1);
         }
-        System.out.println(newURL.toString());
+        if(id != null && !id.isBlank())
+        {
+            newURL.append("/").append(id);
+        }
         return newURL.toString();
     }
 
