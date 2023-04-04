@@ -18,7 +18,7 @@ public class MovieAPI{
 
     public static List<Movie> getAllMovies()
     {
-        return makeRequest(baseURL);
+        return makeRequest(createURL(null,null,null,null));
     }
     public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom)
     {
@@ -46,7 +46,7 @@ public class MovieAPI{
         StringBuilder newURL = new StringBuilder();
         newURL.append(baseURL);
         //String url = newURL.toString();
-        if((query != null && !query.trim().equals(""))|| genre != null || releaseYear != null || ratingFrom != null)
+        if((query != null && !query.trim().equals("")) || (genre != null && genre != Genre.ALL_GENRES) || releaseYear != null || ratingFrom != null)
         {
             newURL.append("?");
             if(query != null && !query.trim().equals(""))
@@ -55,7 +55,7 @@ public class MovieAPI{
                 System.out.println(query);
                 newURL.append("query=").append(query).append("&");
             }
-            if(genre != null)
+            if(genre != null && genre != Genre.ALL_GENRES)
             {
                 newURL.append("genre=").append(genre).append("&");
             }

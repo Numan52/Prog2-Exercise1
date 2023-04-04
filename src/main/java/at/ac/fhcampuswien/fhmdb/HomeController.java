@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -68,23 +67,48 @@ public class HomeController implements Initializable {
 
         searchBtn.setOnAction(actionEvent -> { //click on search button
             observableMovies.clear();
-            observableMovies.addAll(allMovies);
             if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
             {
                 genreComboBox.setValue(Genre.ALL_GENRES);
             }
-            filterMovies(observableMovies, searchField.getText(), (Genre) genreComboBox.getValue());
-
+            observableMovies.addAll(MovieAPI.getAllMovies(searchField.getText(), Genre.valueOf(genreComboBox.getValue().toString()), null, null));
             if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
                 sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
             } else if(sortBtn.getText().equals("Sort (desc)")){
                 sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
             }
-            //else stick with no order
 
         });
 
     }
+
+
+    public void sortMoviesAscending(ObservableList<Movie> allMovies) {
+        if(allMovies == null)
+        {
+            throw new NullPointerException("List is null");
+        }
+        allMovies.sort(Comparator.comparing(Movie::getTitle));
+
+        //First attempt
+        /*
+        Comparator<Movie> titlecomapre = new Comparator<Movie>() { //create Comparator for collection.sort
+            @Override //is abstact methode in Comparator -> needs to be overrided
+            public int compare(Movie m1, Movie m2) {
+                return String.CASE_INSENSITIVE_ORDER.compare(m1.getTitle(), m2.getTitle());
+            }
+        };
+        Collections.sort(allMovies, titlecomapre);
+        */
+    }
+    public void sortMoviesDescending(ObservableList<Movie> allMovies) {
+        if(allMovies == null)
+        {
+            throw new NullPointerException("List is null");
+        }
+        allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+    }
+/*
     public void filterMovies(ObservableList<Movie> allMovies, String searchText, Genre genre) {
         if(allMovies == null)
         {
@@ -120,32 +144,6 @@ public class HomeController implements Initializable {
             allMovies.addAll(filtermovies);
         }
     }
-
-    public void sortMoviesAscending(ObservableList<Movie> allMovies) {
-        if(allMovies == null)
-        {
-            throw new NullPointerException("List is null");
-        }
-        allMovies.sort(Comparator.comparing(Movie::getTitle));
-
-        //First attempt
-        /*
-        Comparator<Movie> titlecomapre = new Comparator<Movie>() { //create Comparator for collection.sort
-            @Override //is abstact methode in Comparator -> needs to be overrided
-            public int compare(Movie m1, Movie m2) {
-                return String.CASE_INSENSITIVE_ORDER.compare(m1.getTitle(), m2.getTitle());
-            }
-        };
-        Collections.sort(allMovies, titlecomapre);
-        */
-    }
-    public void sortMoviesDescending(ObservableList<Movie> allMovies) {
-        if(allMovies == null)
-        {
-            throw new NullPointerException("List is null");
-        }
-        allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
-    }
-
+    */
     //could make sorting movies ascending und descending in one methode with second parameter true=ascending,false=descending TODO look at benefits
 }
