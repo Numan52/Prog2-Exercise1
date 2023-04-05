@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
     @FXML
@@ -32,7 +33,15 @@ public class HomeController implements Initializable {
     public JFXComboBox genreComboBox;
 
     @FXML
+    public JFXComboBox releaseyearComboBox;
+
+    @FXML
+    public JFXComboBox ratingComboBox;
+
+    @FXML
     public JFXButton sortBtn;
+
+    public JFXButton resetBtn;
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
@@ -40,7 +49,16 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(MovieAPI.getAllMovies());         // add dummy data to observable list
+        try
+        {
+       observableMovies.addAll(MovieAPI.getAllMovies());
+        }
+        catch(Exception e)
+        {
+            System.err.println(e.getMessage());
+            observableMovies.addAll(Movie.initializeMovies());
+        }
+        // add dummy data to observable list
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
@@ -48,6 +66,21 @@ public class HomeController implements Initializable {
         //add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Genre.values()); //add all genres to combobox
+
+        List<Double> rat = observableMovies.stream()
+                .map(Movie::getRating)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        ratingComboBox.getItems().addAll(rat);
+
+        List<Integer> ry = observableMovies.stream()
+                .map(Movie::getReleaseYear)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        releaseyearComboBox.getItems().addAll(ry);
+
 
         // add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
@@ -65,13 +98,26 @@ public class HomeController implements Initializable {
             }
         });
 
+        resetBtn.setOnAction(actionEvent -> {
+            searchField.setText("");
+            genreComboBox.setValue(null);
+            releaseyearComboBox.setValue(null);
+            ratingComboBox.setValue(null);
+            observableMovies.clear();
+            observableMovies.addAll(MovieAPI.getAllMovies());
+            sortBtn.setText("Sort");
+        });
+
         searchBtn.setOnAction(actionEvent -> { //click on search button
             observableMovies.clear();
             if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
             {
                 genreComboBox.setValue(Genre.ALL_GENRES);
             }
-            observableMovies.addAll(MovieAPI.getAllMovies(searchField.getText(), Genre.valueOf(genreComboBox.getValue().toString()), null, null));
+            String releaseyear = (releaseyearComboBox.getValue() != null) ? releaseyearComboBox.getValue().toString() : null;
+            String rating = (ratingComboBox.getValue() != null) ? ratingComboBox.getValue().toString() : null;
+            observableMovies.addAll(MovieAPI.getAllMovies(searchField.getText(), Genre.valueOf(genreComboBox.getValue().toString()),
+                    releaseyear, rating));
             if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
                 sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
             } else if(sortBtn.getText().equals("Sort (desc)")){
