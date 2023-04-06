@@ -63,29 +63,28 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        //add genre filter items with genreComboBox.getItems().addAll(...)
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Genre.values()); //add all genres to combobox
 
-        List<Double> rat = observableMovies.stream()
+        List<Double> allratings = observableMovies.stream()
                 .map(Movie::getRating)
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
-        ratingComboBox.getItems().addAll(rat);
+        ratingComboBox.getItems().addAll(allratings);
 
-        List<Integer> ry = observableMovies.stream()
+        List<Integer> allreleaseyears = observableMovies.stream()
                 .map(Movie::getReleaseYear)
                 .distinct()
                 .sorted()
                 .collect(Collectors.toList());
-        releaseyearComboBox.getItems().addAll(ry);
+        releaseyearComboBox.getItems().addAll(allreleaseyears);
 
 
         // add event handlers to buttons and call the regarding methods
         // either set event handlers in the fxml file (onAction) or add them here
 
-        // Sort button example:
+        //Sort Button:
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)") || sortBtn.getText().equals("Sort")) {
                 //sort observableMovies ascending a-z
@@ -98,6 +97,7 @@ public class HomeController implements Initializable {
             }
         });
 
+        //Reset Button:
         resetBtn.setOnAction(actionEvent -> {
             searchField.setText("");
             genreComboBox.setValue(null);
@@ -108,22 +108,9 @@ public class HomeController implements Initializable {
             sortBtn.setText("Sort");
         });
 
+        //Search Button:
         searchBtn.setOnAction(actionEvent -> { //click on search button
-            observableMovies.clear();
-            if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
-            {
-                genreComboBox.setValue(Genre.ALL_GENRES);
-            }
-            String releaseyear = (releaseyearComboBox.getValue() != null) ? releaseyearComboBox.getValue().toString() : null;
-            String rating = (ratingComboBox.getValue() != null) ? ratingComboBox.getValue().toString() : null;
-            observableMovies.addAll(MovieAPI.getAllMovies(searchField.getText(), Genre.valueOf(genreComboBox.getValue().toString()),
-                    releaseyear, rating));
-            if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
-                sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
-            } else if(sortBtn.getText().equals("Sort (desc)")){
-                sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
-            }
-
+            filterMoviesAPI();
         });
 
     }
@@ -153,6 +140,24 @@ public class HomeController implements Initializable {
             throw new NullPointerException("List is null");
         }
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
+    }
+
+    public void filterMoviesAPI()
+    {
+        observableMovies.clear();
+        if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
+        {
+            genreComboBox.setValue(Genre.ALL_GENRES);
+        }
+        String releaseyear = (releaseyearComboBox.getValue() != null) ? releaseyearComboBox.getValue().toString() : null;
+        String rating = (ratingComboBox.getValue() != null) ? ratingComboBox.getValue().toString() : null;
+        observableMovies.addAll(MovieAPI.getAllMovies(searchField.getText(), Genre.valueOf(genreComboBox.getValue().toString()),
+                releaseyear, rating));
+        if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
+            sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
+        } else if(sortBtn.getText().equals("Sort (desc)")){
+            sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
+        }
     }
 /*
     public void filterMovies(ObservableList<Movie> allMovies, String searchText, Genre genre) {
@@ -191,5 +196,4 @@ public class HomeController implements Initializable {
         }
     }
     */
-    //could make sorting movies ascending und descending in one methode with second parameter true=ascending,false=descending TODO look at benefits
 }

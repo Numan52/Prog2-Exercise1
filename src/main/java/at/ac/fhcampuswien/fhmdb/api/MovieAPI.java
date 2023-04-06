@@ -14,7 +14,6 @@ import java.util.List;
 public class MovieAPI{
 
     private static final String BASE_URL = "https://prog2.fh-campuswien.ac.at/movies";
-
     private static final OkHttpClient client = new OkHttpClient();
 
     public static List<Movie> getAllMovies()
