@@ -16,7 +16,9 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class HomeController implements Initializable {
@@ -113,6 +115,16 @@ public class HomeController implements Initializable {
             filterMoviesAPI();
         });
 
+    }
+
+    public String getMostPopularActor(ObservableList<Movie> movies){
+        return movies.stream()
+                .flatMap(movie -> movie.getMainCast().stream())
+                .collect(Collectors.groupingBy(actor -> actor, Collectors.counting()))
+                .entrySet().stream()
+                .max((entry1, entry2) -> Long.compare(entry1.getValue(), entry2.getValue()))
+                .map(entry -> entry.getKey())
+                .orElse(null);
     }
 
 

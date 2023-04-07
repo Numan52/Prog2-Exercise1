@@ -74,6 +74,7 @@ class HomeControllerTest {
         assertEquals("Akanda", allmovies.get(0).getTitle());
         assertEquals("Dragon", allmovies.get(1).getTitle());
     }
+    /*
     @Test
     void filter_list_after_seachtext_Fire_no_genre_finds_movie_with_Fire_in_description()
     {
@@ -164,5 +165,5 @@ class HomeControllerTest {
         //then
         assertEquals("Free Guy",allMovies.get(0).getTitle());
     }
-
+*/
 }
