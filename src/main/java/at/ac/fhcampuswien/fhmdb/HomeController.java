@@ -117,6 +117,11 @@ public class HomeController implements Initializable {
 
     }
 
+    /*
+    creates a single stream of actors from a list of movies,
+    groups the actors by name and counts their occurrences,x
+    finds the actor with the highest count, and returns their name as a String
+    */
     public String getMostPopularActor(ObservableList<Movie> movies){
         return movies.stream()
                 .flatMap(movie -> movie.getMainCast().stream())
@@ -127,6 +132,12 @@ public class HomeController implements Initializable {
                 .orElse(null);
     }
 
+    public int getLongestMovieTitle(ObservableList<Movie> movies){
+        return movies.stream()
+                .mapToInt(movie -> movie.getTitle().length())
+                .max()
+                .orElse(0);
+    }
 
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
         if(allMovies == null)
