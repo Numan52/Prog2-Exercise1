@@ -139,6 +139,13 @@ public class HomeController implements Initializable {
                 .orElse(0);
     }
 
+    public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
+        return movies.stream()
+                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+                .collect(Collectors.toList());
+    }
+
+
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
         if(allMovies == null)
         {
