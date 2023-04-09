@@ -18,38 +18,37 @@ public class MovieAPI{
 
     public static List<Movie> getAllMovies()
     {
-        return typecastJsonintoObjects(makeRequest(createURL(null,null,null,null,null)));
+        return parseJsonToMovieList(makeRequest(createURL(null,null,null,null,null)));
     }
     public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom)
     {
-       return typecastJsonintoObjects(makeRequest(createURL(query,genre,releaseYear,ratingFrom,null)));
+       return parseJsonToMovieList(makeRequest(createURL(query,genre,releaseYear,ratingFrom,null)));
     }
     public static Movie getOneMovie(String id)
     {
-        return typecastJsonintoObject(makeRequest(createURL(null,null,null,null,id)));
+        return parseJsonToMovie(makeRequest(createURL(null,null,null,null,id)));
     }
 
-    private static List<Movie> typecastJsonintoObjects(String responsebody)
+    private static List<Movie> parseJsonToMovieList(String responseBody)
     {
         try{
             Gson gson = new Gson();
-            Movie[] movies = gson.fromJson(responsebody, Movie[].class);
+            Movie[] movies = gson.fromJson(responseBody, Movie[].class);
             return Arrays.asList(movies);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
+            System.err.println("Problem by parsing Json into Movielist: " + e.getMessage());
             return null;
         }
     }
-    private static Movie typecastJsonintoObject(String responsebody)
+    private static Movie parseJsonToMovie(String responseBody)
     {
         try{
             Gson gson = new Gson();
-            Movie movie = gson.fromJson(responsebody, Movie.class);
-            return movie;
-        }
-        catch (Exception e)
+            return gson.fromJson(responseBody, Movie.class);
+        } catch (Exception e)
         {
+            System.err.println("Problem by parsing Json into Movie-Object: " + e.getMessage());
             return null;
         }
     }
@@ -60,8 +59,7 @@ public class MovieAPI{
                 .addHeader("User-Agent", "http.agent")
                 .build();
         try (Response response = client.newCall(request).execute()){
-            String responsebody = response.body().string();
-            return responsebody;
+            return response.body().string();
         }
         catch (Exception e){
             System.err.println(e.getMessage());

@@ -112,7 +112,24 @@ public class HomeController implements Initializable {
 
         //Search Button:
         searchBtn.setOnAction(actionEvent -> { //click on search button
-            filterMoviesAPI();
+            observableMovies.clear();
+
+            if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
+            {
+                genreComboBox.setValue(Genre.ALL_GENRES);
+            }
+            String releaseYear = (releaseyearComboBox.getValue() != null) ? releaseyearComboBox.getValue().toString() : null;
+            String rating = (ratingComboBox.getValue() != null) ? ratingComboBox.getValue().toString() : null;
+
+
+            filterMoviesAPI(observableMovies, searchField.getText(), (Genre) genreComboBox.getValue(),releaseYear,rating);
+
+            //stick with the sorting order selected before
+            if(sortBtn.getText().equals("Sort (asc)")) {
+                sortMoviesDescending(observableMovies);
+            } else if(sortBtn.getText().equals("Sort (desc)")){
+                sortMoviesAscending(observableMovies);
+            }
         });
 
     }
@@ -172,21 +189,14 @@ public class HomeController implements Initializable {
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
     }
 
-    public void filterMoviesAPI()
+    public void filterMoviesAPI(ObservableList<Movie> movies, String searchText, Genre genre, String releaseYear, String rating)
     {
-        observableMovies.clear();
-        if (genreComboBox.getValue() == null) //if no genre is selected its auto. All_genres
+        if(movies != null)
         {
-            genreComboBox.setValue(Genre.ALL_GENRES);
+            movies.addAll(MovieAPI.getAllMovies(searchText, genre, releaseYear, rating));
         }
-        String releaseyear = (releaseyearComboBox.getValue() != null) ? releaseyearComboBox.getValue().toString() : null;
-        String rating = (ratingComboBox.getValue() != null) ? ratingComboBox.getValue().toString() : null;
-        observableMovies.addAll(MovieAPI.getAllMovies(searchField.getText(), Genre.valueOf(genreComboBox.getValue().toString()),
-                releaseyear, rating));
-        if(sortBtn.getText().equals("Sort (asc)")) { //stick with the sorting order selected before
-            sortMoviesDescending(observableMovies); //"Sort asc" displayed means order was descending
-        } else if(sortBtn.getText().equals("Sort (desc)")){
-            sortMoviesAscending(observableMovies); //"Sort desc" displayed means order was descending
+        else {
+            throw new NullPointerException("List is null!");
         }
     }
 /*
