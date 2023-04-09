@@ -17,7 +17,7 @@ public class MovieAPI{
     private static final OkHttpClient client = new OkHttpClient();
 
     public static List<Movie> getAllMovies()
-    {
+    {   // return every movie from the API
         return parseJsonToMovieList(makeRequest(createURL(null,null,null,null,null)));
     }
     public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom)
@@ -66,6 +66,10 @@ public class MovieAPI{
         }
         return null;
     }
+
+    /*
+    creates the URL to request the movie data based on selection from the drop-down list
+     */
     private static String createURL(String query, Genre genre, String releaseYear, String ratingFrom, String id)
     {
         StringBuilder newURL = new StringBuilder();

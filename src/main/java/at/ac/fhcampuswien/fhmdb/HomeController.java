@@ -149,6 +149,12 @@ public class HomeController implements Initializable {
                 .orElse(null);
     }
 
+
+    /*
+    maps each Movie object to its title length as an int,
+    finds the maximum title length in the stream of title lengths,
+    returns 0 if the stream is empty (i.e., if the input list is empty) and there is no maximum title length.
+    */
     public int getLongestMovieTitle(ObservableList<Movie> movies){
         return movies.stream()
                 .mapToInt(movie -> movie.getTitle().length())
