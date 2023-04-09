@@ -74,6 +74,22 @@ class HomeControllerTest {
         assertEquals("Akanda", allmovies.get(0).getTitle());
         assertEquals("Dragon", allmovies.get(1).getTitle());
     }
+
+    @Test
+    public void Give_The_Longest_Movie_Title() {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> movies = FXCollections.observableArrayList();
+        movies.add(new Movie("Akanda","Text 1", Arrays.asList(Genre.ACTION,Genre.FAMILY)));
+        movies.add(new Movie("Dragon","Text 2", Arrays.asList(Genre.ACTION,Genre.COMEDY)));
+        movies.add(new Movie("M3GAN","Text 2", Arrays.asList(Genre.HORROR,Genre.THRILLER)));
+        movies.add(new Movie("A quiet place","Text 1", Arrays.asList(Genre.HORROR,Genre.ADVENTURE)));
+        //when
+        int result = homeController.getLongestMovieTitle(movies);
+        //then
+        assertEquals(13, result);
+    }
+
     /*
     @Test
     void filter_list_after_seachtext_Fire_no_genre_finds_movie_with_Fire_in_description()
