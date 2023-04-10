@@ -98,6 +98,7 @@ public class MovieAPI{
         if(id != null && !id.isBlank())
         {
             newURL.append("/").append(id);
+
         }
         return newURL.toString();
     }
