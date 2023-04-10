@@ -179,7 +179,7 @@ class HomeControllerTest {
         assertEquals("Actor 1", result);
     }
     @Test
-    void test_Count_Movies_From() {
+    void testCountMoviesFrom() {
         //given
         HomeController homeController = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList();
@@ -293,5 +293,47 @@ class HomeControllerTest {
         assertThrowsExactly(NullPointerException.class, () -> homeController.getMoviesBetweenYears(allMovies, 2005, 2015));
     }
 
+    @Test
+    public void get_Most_Popular_Actor_with_null_list_throws_exception()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = null;
+
+        //when & then
+        assertThrowsExactly(NullPointerException.class, () -> homeController.getMostPopularActor(allMovies));
+    }
+    @Test
+    public void get_Most_Popular_Actor_with_each_Actor_only_in_one_movie_returns_movie_Actor_from_last_movie()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        allMovies.add(new Movie("1", "Akhanda", Arrays.asList(Genre.ACTION, Genre.FAMILY), 2021, "Text 1", "", 168, Arrays.asList("Director 1"), Arrays.asList("Writer 1"), Arrays.asList("Actor 1"), 6.5));
+        allMovies.add(new Movie("2", "Shutter Island", Arrays.asList(Genre.THRILLER), 2010, "Text 2", "", 138, Arrays.asList("Director 2"), Arrays.asList("Writer 2"), Arrays.asList("Actor 2"), 8.0));
+        allMovies.add(new Movie("3", "Ant-Man", Arrays.asList(Genre.ACTION, Genre.COMEDY), 2015, "Text 3", "", 115, Arrays.asList("Director 3"), Arrays.asList("Writer 3"), Arrays.asList("Actor 3"), 7.5));
+        allMovies.add(new Movie("4", "6 Underground", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 4", "", 128, Arrays.asList("Director 4"), Arrays.asList("Writer 4"), Arrays.asList("Actor 4"), 9.0));
+        allMovies.add(new Movie("5", "7 Overwatch", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 5", "", 128, Arrays.asList("Director 5"), Arrays.asList("Writer 5"), Arrays.asList("Actor 5"), 9.0));
+
+        //when
+        String result = homeController.getMostPopularActor(allMovies);
+
+        //then
+        assertEquals("Actor 5", result);
+    }
+
+    @Test
+    public void get_Most_Popular_Actor_with_empty_list_returns_null()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+
+        //when
+        String result = homeController.getMostPopularActor(allMovies);
+
+        //then
+        assertNull(result);
+    }
 }
 
