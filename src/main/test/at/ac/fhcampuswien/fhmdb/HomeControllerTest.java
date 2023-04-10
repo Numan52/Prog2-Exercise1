@@ -85,5 +85,34 @@ class HomeControllerTest {
         assertEquals("Akanda", allMovies.get(0).getTitle());
         assertEquals("Dragon", allMovies.get(1).getTitle());
     }
+    @Test
+    public void get_all_movies_from_API_with_no_filter()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
 
+        //when
+        homeController.filterMoviesAPI(allMovies,null,null,null,null);
+
+        //then
+        assertEquals(33,allMovies.size());
+    }
+    @Test
+    public void get_all_movies_from_API_with_filter()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        String query = "O";
+        Genre genre = Genre.ALL_GENRES;
+        String releaseYear = "2019";
+        String ratingFrom = "6.6";
+
+        //when
+        homeController.filterMoviesAPI(allMovies, query, genre, releaseYear, ratingFrom);
+
+        //then
+        assertEquals(2, allMovies.size());
+    }
 }
