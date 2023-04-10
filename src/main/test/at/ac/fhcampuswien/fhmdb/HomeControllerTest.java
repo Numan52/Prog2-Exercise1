@@ -144,6 +144,40 @@ class HomeControllerTest {
         //when & then
         assertThrowsExactly(IllegalArgumentException.class, () -> homeController.getMoviesBetweenYears(allMovies, -201, -2012));
     }
+
+    @Test
+    public void filter_movies_with_movies_not_between_two_years_return_empty_list() {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        allMovies.add(new Movie("1", "Akhanda", Arrays.asList(Genre.ACTION, Genre.FAMILY), 2021, "Text 1", "", 168, Arrays.asList("Director 1"), Arrays.asList("Writer 1"), Arrays.asList("Actor 1"), 6.5));
+        allMovies.add(new Movie("2", "Shutter Island", Arrays.asList(Genre.THRILLER), 2010, "Text 2", "", 138, Arrays.asList("Director 2"), Arrays.asList("Writer 2"), Arrays.asList("Actor 2"), 8.0));
+        allMovies.add(new Movie("3", "Ant-Man", Arrays.asList(Genre.ACTION, Genre.COMEDY), 2015, "Text 3", "", 115, Arrays.asList("Director 3"), Arrays.asList("Writer 3"), Arrays.asList("Actor 3"), 7.5));
+        allMovies.add(new Movie("4", "6 Underground", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 4", "", 128, Arrays.asList("Director 4"), Arrays.asList("Writer 4"), Arrays.asList("Actor 4"), 9.0));
+
+        //when
+        List<Movie> filteredMoviesByYear = homeController.getMoviesBetweenYears(allMovies, 2005, 2009);
+
+        //then
+        assertEquals(0, filteredMoviesByYear.size());
+    }
+    @Test
+    public void get_Most_Popular_Actor_from_movie_list()
+    {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        allMovies.add(new Movie("1", "Akhanda", Arrays.asList(Genre.ACTION, Genre.FAMILY), 2021, "Text 1", "", 168, Arrays.asList("Director 1"), Arrays.asList("Writer 1"), Arrays.asList("Actor 1"), 6.5));
+        allMovies.add(new Movie("2", "Shutter Island", Arrays.asList(Genre.THRILLER), 2010, "Text 2", "", 138, Arrays.asList("Director 2"), Arrays.asList("Writer 2"), Arrays.asList("Actor 2"), 8.0));
+        allMovies.add(new Movie("3", "Ant-Man", Arrays.asList(Genre.ACTION, Genre.COMEDY), 2015, "Text 3", "", 115, Arrays.asList("Director 3"), Arrays.asList("Writer 3"), Arrays.asList("Actor 3", "Actor 1"), 7.5));
+        allMovies.add(new Movie("4", "6 Underground", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 4", "", 128, Arrays.asList("Director 4"), Arrays.asList("Writer 4"), Arrays.asList("Actor 4", "Actor 1"), 9.0));
+
+        //when
+        String result = homeController.getMostPopularActor(allMovies);
+
+        //then
+        assertEquals("Actor 1", result);
+    }
     @Test
     void testCountMoviesFrom() {
         //given
