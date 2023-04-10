@@ -115,7 +115,6 @@ class HomeControllerTest {
         //then
         assertEquals(2, allMovies.size());
     }
-
     @Test
     public void filter_movies_between_two_years_with_startyear_bigger_endyear_return_null() {
         //given
@@ -145,8 +144,6 @@ class HomeControllerTest {
         //when & then
         assertThrowsExactly(IllegalArgumentException.class, () -> homeController.getMoviesBetweenYears(allMovies, -201, -2012));
     }
-
-
     @Test
     void testCountMoviesFrom() {
         //given
@@ -164,6 +161,30 @@ class HomeControllerTest {
 
         //then
         assertEquals(2L, result);
+    }
+    @Test
+    public void get_one_movie_from_API_with_valid_id()
+    {
+        //given
+        String id = "4e1920ba-6963-4035-ac76-22baa7881111";
+
+        //when
+        Movie oneMovie = MovieAPI.getOneMovie(id);
+
+        //then
+        assertEquals("The Dark Knight", oneMovie.getTitle());
+    }
+    @Test
+    public void get_one_movie_from_API_with_invalid_id()
+    {
+        //given
+        String id = "4";
+
+        //when
+        Movie oneMovie = MovieAPI.getOneMovie(id);
+
+        //then
+        assertNull(oneMovie);
     }
 }
 
