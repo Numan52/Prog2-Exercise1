@@ -238,5 +238,28 @@ class HomeControllerTest {
         assertEquals(14, result);
     }
 
+    @Test
+    public void get_longest_movie_title_with_null_list_throws_exception(){
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = null;
+
+        //when & then
+        assertThrowsExactly(NullPointerException.class, () -> homeController.getLongestMovieTitle(allMovies));
+    }
+
+    @Test
+    public void get_longest_movie_title_with_empty_list_return_0(){
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+
+        //when
+        int result = homeController.getLongestMovieTitle(allMovies);
+
+        //then
+        assertEquals(0, result);
+    }
+
 }
 
