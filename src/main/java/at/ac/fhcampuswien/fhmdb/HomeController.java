@@ -173,6 +173,7 @@ public class HomeController implements Initializable {
                 .filter(movie -> movie.getDirectors().equals(director))
                 .count();
         return counter;
+        //
     }
 
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
