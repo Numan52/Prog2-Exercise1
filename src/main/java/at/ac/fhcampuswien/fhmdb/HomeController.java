@@ -140,13 +140,20 @@ public class HomeController implements Initializable {
     finds the actor with the highest count, and returns their name as a String
     */
     public String getMostPopularActor(ObservableList<Movie> movies){
-        return movies.stream()
-                .flatMap(movie -> movie.getMainCast().stream())
-                .collect(Collectors.groupingBy(actor -> actor, Collectors.counting()))
-                .entrySet().stream()
-                .max((entry1, entry2) -> Long.compare(entry1.getValue(), entry2.getValue()))
-                .map(entry -> entry.getKey())
-                .orElse(null);
+        if(movies != null)
+        {
+            return movies.stream()
+                    .flatMap(movie -> movie.getMainCast().stream())
+                    .collect(Collectors.groupingBy(actor -> actor, Collectors.counting()))
+                    .entrySet().stream()
+                    .max((entry1, entry2) -> Long.compare(entry1.getValue(), entry2.getValue()))
+                    .map(entry -> entry.getKey())
+                    .orElse(null);
+        }
+        else
+        {
+            throw new NullPointerException("List is null!");
+        }
     }
 
 
@@ -156,16 +163,40 @@ public class HomeController implements Initializable {
     returns 0 if the stream is empty (i.e., if the input list is empty) and there is no maximum title length.
     */
     public int getLongestMovieTitle(ObservableList<Movie> movies){
-        return movies.stream()
-                .mapToInt(movie -> movie.getTitle().length())
-                .max()
-                .orElse(0);
+        if(movies != null) {
+            return movies.stream()
+                    .mapToInt(movie -> movie.getTitle().length())
+                    .max()
+                    .orElse(0);
+        }
+        else
+        {
+            throw new NullPointerException("List is null!");
+        }
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear) {
-        return movies.stream()
-                .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
-                .collect(Collectors.toList());
+        if(movies != null)
+        {
+            if(startYear >= 0 && endYear >= 0 )
+            {
+                if(startYear <= endYear)
+                {
+                    return movies.stream()
+                            .filter(movie -> movie.getReleaseYear() >= startYear && movie.getReleaseYear() <= endYear)
+                            .collect(Collectors.toList());
+                }
+                System.err.println("Start-year is bigger than End-year!");
+                return null;
+            }
+            else {
+                throw new IllegalArgumentException("Start-year or End-year is negativ");
+            }
+        }
+        else
+        {
+            throw new NullPointerException("List is null!");
+        }
     }
 
     public static long countMoviesFrom(List<Movie> movies, String director) {
