@@ -115,4 +115,35 @@ class HomeControllerTest {
         //then
         assertEquals(2, allMovies.size());
     }
+
+    @Test
+    public void filter_movies_between_two_years_with_startyear_bigger_endyear_return_null() {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        allMovies.add(new Movie("1", "Akhanda", Arrays.asList(Genre.ACTION, Genre.FAMILY), 2021, "Text 1", "", 168, Arrays.asList("Director 1"), Arrays.asList("Writer 1"), Arrays.asList("Actor 1"), 6.5));
+        allMovies.add(new Movie("2", "Shutter Island", Arrays.asList(Genre.THRILLER), 2010, "Text 2", "", 138, Arrays.asList("Director 2"), Arrays.asList("Writer 2"), Arrays.asList("Actor 2"), 8.0));
+        allMovies.add(new Movie("3", "Ant-Man", Arrays.asList(Genre.ACTION, Genre.COMEDY), 2015, "Text 3", "", 115, Arrays.asList("Director 3"), Arrays.asList("Writer 3"), Arrays.asList("Actor 3"), 7.5));
+        allMovies.add(new Movie("4", "6 Underground", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 4", "", 128, Arrays.asList("Director 4"), Arrays.asList("Writer 4"), Arrays.asList("Actor 4"), 9.0));
+
+        //when
+        List<Movie> filteredMoviesByYear = homeController.getMoviesBetweenYears(allMovies, 2017, 2015);
+
+        //then
+        assertNull(filteredMoviesByYear);
+    }
+    @Test
+    public void filter_movies_between_two_negativ_years_throws_exception() {
+        //given
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = FXCollections.observableArrayList();
+        allMovies.add(new Movie("1", "Akhanda", Arrays.asList(Genre.ACTION, Genre.FAMILY), 2021, "Text 1", "", 168, Arrays.asList("Director 1"), Arrays.asList("Writer 1"), Arrays.asList("Actor 1"), 6.5));
+        allMovies.add(new Movie("2", "Shutter Island", Arrays.asList(Genre.THRILLER), 2010, "Text 2", "", 138, Arrays.asList("Director 2"), Arrays.asList("Writer 2"), Arrays.asList("Actor 2"), 8.0));
+        allMovies.add(new Movie("3", "Ant-Man", Arrays.asList(Genre.ACTION, Genre.COMEDY), 2015, "Text 3", "", 115, Arrays.asList("Director 3"), Arrays.asList("Writer 3"), Arrays.asList("Actor 3"), 7.5));
+        allMovies.add(new Movie("4", "6 Underground", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 4", "", 128, Arrays.asList("Director 4"), Arrays.asList("Writer 4"), Arrays.asList("Actor 4"), 9.0));
+
+        //when & then
+        assertThrowsExactly(IllegalArgumentException.class, () -> homeController.getMoviesBetweenYears(allMovies, -201, -2012));
+    }
+
 }
