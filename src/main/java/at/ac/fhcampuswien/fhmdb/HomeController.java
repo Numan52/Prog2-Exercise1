@@ -168,6 +168,12 @@ public class HomeController implements Initializable {
                 .collect(Collectors.toList());
     }
 
+    public static long countMoviesFrom(List<Movie> movies, String director) {
+        long counter = movies.stream()
+                .filter(movie -> movie.getDirectors().equals(director))
+                .count();
+        return counter;
+    }
 
     public void sortMoviesAscending(ObservableList<Movie> allMovies) {
         if(allMovies == null)
