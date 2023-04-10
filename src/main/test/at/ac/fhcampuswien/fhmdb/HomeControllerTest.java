@@ -1,11 +1,13 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Test;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -79,16 +81,40 @@ class HomeControllerTest {
     public void Give_The_Longest_Movie_Title() {
         //given
         HomeController homeController = new HomeController();
-        ObservableList<Movie> movies = FXCollections.observableArrayList();
-        movies.add(new Movie("Akanda","Text 1", Arrays.asList(Genre.ACTION,Genre.FAMILY)));
-        movies.add(new Movie("Dragon","Text 2", Arrays.asList(Genre.ACTION,Genre.COMEDY)));
-        movies.add(new Movie("M3GAN","Text 2", Arrays.asList(Genre.HORROR,Genre.THRILLER)));
-        movies.add(new Movie("A quiet place","Text 1", Arrays.asList(Genre.HORROR,Genre.ADVENTURE)));
+        ObservableList<Movie> allmovies = FXCollections.observableArrayList();
+        allmovies.add(new Movie("Akanda","Text 1", Arrays.asList(Genre.ACTION,Genre.FAMILY)));
+        allmovies.add(new Movie("Dragon","Text 2", Arrays.asList(Genre.ACTION,Genre.COMEDY)));
+        allmovies.add(new Movie("M3GAN","Text 2", Arrays.asList(Genre.HORROR,Genre.THRILLER)));
+        allmovies.add(new Movie("A quiet place","Text 1", Arrays.asList(Genre.HORROR,Genre.ADVENTURE)));
         //when
-        int result = homeController.getLongestMovieTitle(movies);
+        int result = homeController.getLongestMovieTitle(allmovies);
         //then
         assertEquals(13, result);
     }
+
+
+    @Test
+    public void Filter_Movies_Between_Two_Years() {
+        //given
+        HomeController MovieAPI = new HomeController();
+        ObservableList<Movie> allmovies = FXCollections.observableArrayList();
+        allmovies.add(new Movie("1", "Akhanda", Arrays.asList(Genre.ACTION, Genre.FAMILY), 2021, "Text 1", "", 168, Arrays.asList("Director 1"), Arrays.asList("Writer 1"), Arrays.asList("Actor 1"), 6.5));
+        allmovies.add(new Movie("2", "Shutter Island", Arrays.asList(Genre.THRILLER), 2010, "Text 2", "", 138, Arrays.asList("Director 2"), Arrays.asList("Writer 2"), Arrays.asList("Actor 2"), 8.0));
+        allmovies.add(new Movie("3", "Ant-Man", Arrays.asList(Genre.ACTION, Genre.COMEDY), 2015, "Text 3", "", 115, Arrays.asList("Director 3"), Arrays.asList("Writer 3"), Arrays.asList("Actor 3"), 7.5));
+        allmovies.add(new Movie("4", "6 Underground", Arrays.asList(Genre.THRILLER, Genre.ACTION), 2019, "Text 4", "", 128, Arrays.asList("Director 4"), Arrays.asList("Writer 4"), Arrays.asList("Actor 4"), 9.0));
+
+        //when
+        List<Movie> filteredMoviesByYear = MovieAPI.getMoviesBetweenYears(allmovies, 2005, 2015);
+
+        //then
+        assertEquals(2, filteredMoviesByYear.size());
+        for (Movie movie : filteredMoviesByYear) {
+            int releaseYear = movie.getReleaseYear();
+            assertEquals(true, releaseYear >= 2005 && releaseYear <= 2015);
+        }
+    }
+
+
 
     /*
     @Test
