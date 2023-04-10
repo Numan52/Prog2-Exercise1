@@ -20,19 +20,6 @@ public class Movie {
     private List<String> mainCast;
     private double rating;
 
-    public Movie(String title, String description, List<Genre> genres) {
-        this.title = title;
-        this.description = description;
-        this.genres = genres;
-        this.id = null;
-        this.releaseYear = 0;
-        this.imgUrl = null;
-        this.lengthInMinutes = 0;
-        this.directors = null;
-        this.writers = null;
-        this.mainCast = null;
-        this.rating = 0;
-    }
     public Movie(String id, String title, List<Genre> genres,int releaseYear, String description, String imgUrl, int lengthInMinutes,
                  List<String> directors, List<String> writers, List<String> mainCast, double rating)
     {
@@ -101,6 +88,7 @@ public class Movie {
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
         //Add some dummy data here
+        /*
         movies.add(new Movie(
                 "The Maze Runner",
                 "Thomas is deposited in a community of boys after his memory is erased, " +
@@ -141,7 +129,7 @@ public class Movie {
                 "The Super Mario Bros. Movie",
                 "The story of The Super Mario Bros. on their journey through the Mushroom Kingdom",
                 Arrays.asList(Genre.ADVENTURE,Genre.ANIMATION,Genre.COMEDY)));
-
+*/
         return movies;
     }
 }

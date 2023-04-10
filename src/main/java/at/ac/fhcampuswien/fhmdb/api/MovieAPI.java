@@ -99,7 +99,6 @@ public class MovieAPI{
         {
             newURL.append("/").append(id);
         }
-        System.out.println(newURL.toString());
         return newURL.toString();
     }
 
