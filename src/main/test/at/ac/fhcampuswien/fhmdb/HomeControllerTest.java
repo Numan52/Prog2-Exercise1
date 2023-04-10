@@ -282,5 +282,17 @@ class HomeControllerTest {
         }
         */
     }
+
+    @Test
+    public void filter_movies_between_two_years_with_null_list_throws_exception() {
+
+        HomeController homeController = new HomeController();
+        ObservableList<Movie> allMovies = null;
+
+
+        assertThrowsExactly(NullPointerException.class, () -> homeController.getMoviesBetweenYears(allMovies, 2005, 2015));
+    }
+
+
 }
 
