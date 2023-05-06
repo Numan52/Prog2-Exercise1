@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class Movie {
     private String id;
@@ -44,13 +45,8 @@ public class Movie {
         return title;
     }
 
-    public String getGenres() {
-        StringJoiner joiner = new StringJoiner(", "); //will add ", " at every new add after the first add
-        for (Genre g : genres) {
-            joiner.add(g.toString());
-        }
-        return joiner.toString();
-
+    public List<Genre> getGenres() {
+        return genres;
     }
 
     public int getReleaseYear() {
@@ -69,8 +65,9 @@ public class Movie {
         return lengthInMinutes;
     }
 
-    public List<String> getDirectors() {
-        return directors;
+    public String getDirectors() {
+
+        return String.join(", ", directors);
     }
 
     public List<String> getWriters() {

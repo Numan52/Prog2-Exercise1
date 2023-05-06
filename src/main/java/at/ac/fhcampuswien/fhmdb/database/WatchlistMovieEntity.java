@@ -46,8 +46,12 @@ public class WatchlistMovieEntity {
     }
     private String genresToString(List<Genre> genreList)
     {
-        return genreList.stream()
-                .map(Genre::name)
-                .collect(Collectors.joining(","));
+        if(genreList != null)
+        {
+            return genreList.stream()
+                    .map(Genre::name)
+                    .collect(Collectors.joining(","));
+        }
+       return null;
     }
 }

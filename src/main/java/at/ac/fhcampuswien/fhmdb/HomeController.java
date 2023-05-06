@@ -1,6 +1,9 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
@@ -14,10 +17,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,8 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
+    public WatchlistRepository watchlistRepository = new WatchlistRepository();
+
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override
@@ -63,7 +66,7 @@ public class HomeController implements Initializable {
         // add dummy data to observable list
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
-        movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
+        movieListView.setCellFactory(movieListView -> new MovieCell(onAddToWatchlistClicked)); // use custom cell factory to display data
 
         genreComboBox.setPromptText("Filter by Genre");
         genreComboBox.getItems().addAll(Genre.values()); //add all genres to combobox
@@ -133,6 +136,27 @@ public class HomeController implements Initializable {
         });
 
     }
+    private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) ->
+    {
+        System.out.println(clickedItem.toString());
+        if(clickedItem instanceof Movie)
+        {
+            try {
+                watchlistRepository.addToWatchlist(transformMovieToMovieEntity((Movie)clickedItem));
+
+            }catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    };
+
+    public  WatchlistMovieEntity transformMovieToMovieEntity(Movie movie)
+    {
+
+        return new WatchlistMovieEntity(movie.getId(),movie.getTitle(),movie.getDescription(),movie.getGenres(),movie.getReleaseYear(),movie.getImgUrl(),movie.getLengthInMinutes(),movie.getRating());
+    }
+
 
     /*
     creates a single stream of actors from a list of movies,
