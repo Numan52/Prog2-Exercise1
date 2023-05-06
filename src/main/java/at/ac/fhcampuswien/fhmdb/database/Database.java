@@ -30,10 +30,10 @@ public class Database {
         }
     }
 
-    public void testDB() throws SQLException {
+    /*public void testDB() throws SQLException {
         WatchlistMovieEntity movie = new WatchlistMovieEntity("a","b","c", Arrays.asList(Genre.THRILLER, Genre.ACTION),2015,"url",10,2.2);
         watchlistMovieDao.create(movie);
-    }
+    }*/
 
 
     public static Database getDatabase()
@@ -45,12 +45,18 @@ public class Database {
         }
         return instance;
     }
-private static void createTable() throws SQLException {
+    private static void createTable() throws SQLException {
     TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
-}
-
+    }
 
     private static void createConnectionSource() throws SQLException {
         connectionSource = new JdbcConnectionSource(DB_URL,username,password);
+    }
+    public ConnectionSource getConnectionSource() {
+        return connectionSource;
+    }
+
+    public Dao<WatchlistMovieEntity, Long> getWatchlistMovieDao() {
+        return watchlistMovieDao;
     }
 }
