@@ -40,10 +40,14 @@ public class WatchlistMovieEntity {
         this.lengthInMinutes = lengthInMinutes;
         this.rating = rating;
     }
+    public WatchlistMovieEntity()
+    {
+
+    }
     private String genresToString(List<Genre> genreList)
     {
         return genreList.stream()
                 .map(Genre::name)
-                .collect(Collectors.joining(" ,"));
+                .collect(Collectors.joining(","));
     }
 }
