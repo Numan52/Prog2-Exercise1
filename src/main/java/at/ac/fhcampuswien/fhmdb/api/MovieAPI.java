@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.api;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import com.google.gson.Gson;
@@ -16,16 +17,13 @@ public class MovieAPI{
     private static final String BASE_URL = "https://prog2.fh-campuswien.ac.at/movies";
     private static final OkHttpClient client = new OkHttpClient();
 
-    public static List<Movie> getAllMovies()
-    {   // return every movie from the API
+    public static List<Movie> getAllMovies() throws MovieApiException {   // return every movie from the API
         return parseJsonToMovieList(makeRequest(createURL(null,null,null,null,null)));
     }
-    public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom)
-    {
+    public static List<Movie> getAllMovies(String query, Genre genre, String releaseYear, String ratingFrom) throws MovieApiException {
        return parseJsonToMovieList(makeRequest(createURL(query,genre,releaseYear,ratingFrom,null)));
     }
-    public static Movie getOneMovie(String id)
-    {
+    public static Movie getOneMovie(String id) throws MovieApiException {
         return parseJsonToMovie(makeRequest(createURL(null,null,null,null,id)));
     }
 
@@ -41,19 +39,20 @@ public class MovieAPI{
             return null;
         }
     }
-    private static Movie parseJsonToMovie(String responseBody)
+    private static Movie parseJsonToMovie(String responseBody) throws MovieApiException
     {
         try{
             Gson gson = new Gson();
             return gson.fromJson(responseBody, Movie.class);
         } catch (Exception e)
         {
-            System.err.println("Problem by parsing Json into Movie-Object: " + e.getMessage());
-            return null;
+            //System.err.println("Problem by parsing Json into Movie-Object: " + e.getMessage());
+            throw new MovieApiException(e.getMessage());
+            //return null;
         }
     }
 
-    private static String makeRequest(String url){
+    private static String makeRequest(String url) throws MovieApiException {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader("User-Agent", "http.agent")
@@ -62,9 +61,11 @@ public class MovieAPI{
             return response.body().string();
         }
         catch (Exception e){
-            System.err.println(e.getMessage());
+            throw new MovieApiException(e.getMessage());
+            //System.err.println(e.getMessage());
+
         }
-        return null;
+        //return null;
     }
 
     /*

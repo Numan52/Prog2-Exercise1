@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import com.j256.ormlite.dao.Dao;
 import javafx.scene.chart.PieChart;
@@ -14,15 +15,32 @@ public class WatchlistRepository {
         watchlistMovieDao = Database.getDatabase().getWatchlistMovieDao();
     }
 
-    public void removeFromWatchlist(WatchlistMovieEntity movie) throws SQLException {
-        watchlistMovieDao.delete(movie);
+    public void removeFromWatchlist(WatchlistMovieEntity movie) throws DatabaseException {
+        try {
+            watchlistMovieDao.delete(movie);
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+        //watchlistMovieDao.delete(movie);
     }
-    public List<WatchlistMovieEntity> getAll() throws SQLException {
-        return watchlistMovieDao.queryForAll();
+    public List<WatchlistMovieEntity> getAll() throws DatabaseException {
+        try {
+            return watchlistMovieDao.queryForAll();
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
     }
+        //return watchlistMovieDao.queryForAll();
 
-    public void addToWatchlist(WatchlistMovieEntity movie) throws SQLException {
-        watchlistMovieDao.create(movie);
+
+    public void addToWatchlist(WatchlistMovieEntity movie) throws DatabaseException {
+        try {
+            watchlistMovieDao.create(movie);
+        } catch (SQLException e) {
+            throw new DatabaseException();
+        }
+
+        //watchlistMovieDao.create(movie);
     }
 
 }

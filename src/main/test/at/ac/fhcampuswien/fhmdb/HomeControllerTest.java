@@ -1,6 +1,7 @@
 package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import javafx.collections.FXCollections;
@@ -86,8 +87,7 @@ class HomeControllerTest {
         assertEquals("Dragon", allMovies.get(1).getTitle());
     }
     @Test
-    public void get_all_movies_from_API_with_no_filter()
-    {
+    public void get_all_movies_from_API_with_no_filter(){
         //given
         HomeController homeController = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList();
@@ -99,8 +99,7 @@ class HomeControllerTest {
         assertEquals(33,allMovies.size());
     }
     @Test
-    public void get_all_movies_from_API_with_filter()
-    {
+    public void get_all_movies_from_API_with_filter()  {
         //given
         HomeController homeController = new HomeController();
         ObservableList<Movie> allMovies = FXCollections.observableArrayList();
@@ -197,8 +196,7 @@ class HomeControllerTest {
         assertEquals(2L, result);
     }
     @Test
-    public void get_one_movie_from_API_with_valid_id()
-    {
+    public void get_one_movie_from_API_with_valid_id() {
         //given
         String id = "4e1920ba-6963-4035-ac76-22baa7881111";
 
@@ -209,8 +207,7 @@ class HomeControllerTest {
         assertEquals("The Dark Knight", oneMovie.getTitle());
     }
     @Test
-    public void get_one_movie_from_API_with_invalid_id()
-    {
+    public void get_one_movie_from_API_with_invalid_id(){
         //given
         String id = "4";
 

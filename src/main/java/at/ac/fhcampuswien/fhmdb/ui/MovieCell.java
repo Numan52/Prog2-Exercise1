@@ -60,10 +60,10 @@ public class MovieCell extends ListCell<Movie> {
             );
             genres.setText(
                     movie.getGenres() != null
-                    ? movie.getGenres().stream()
+                            ? movie.getGenres().stream()
                             .map(Genre::name)
                             .collect(Collectors.joining(","))
-                    : "No genre available"
+                            : "No genre available"
             );
             addmoviebutton.setText("Watchlist");
             directors.setText("Directors: " + movie.getDirectors());
@@ -100,4 +100,3 @@ public class MovieCell extends ListCell<Movie> {
         }
     }
 }
-

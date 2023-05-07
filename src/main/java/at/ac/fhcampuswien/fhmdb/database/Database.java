@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -18,13 +19,14 @@ public class Database {
     private static Database instance;
     private static ConnectionSource connectionSource;
     private static Dao<WatchlistMovieEntity, Long> watchlistMovieDao;
+
     private Database()
     {
         try{
             createConnectionSource();
             watchlistMovieDao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
             createTable();
-        }catch (SQLException e)
+        }catch (SQLException | DatabaseException e)
         {
             System.out.println(e.getMessage());
         }
@@ -45,12 +47,22 @@ public class Database {
         }
         return instance;
     }
-    private static void createTable() throws SQLException {
-    TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
+    private static void createTable() throws DatabaseException {
+        try {
+            TableUtils.createTableIfNotExists(connectionSource, WatchlistMovieEntity.class);
+        } catch (SQLException E){
+            throw new DatabaseException();
+        }
+
     }
 
-    private static void createConnectionSource() throws SQLException {
-        connectionSource = new JdbcConnectionSource(DB_URL,username,password);
+    private static void createConnectionSource() throws DatabaseException {
+        try {
+            connectionSource = new JdbcConnectionSource(DB_URL,username,password);
+        } catch (SQLException E){
+            throw new DatabaseException();
+        }
+
     }
     public ConnectionSource getConnectionSource() {
         return connectionSource;

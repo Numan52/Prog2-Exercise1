@@ -3,6 +3,8 @@ package at.ac.fhcampuswien.fhmdb;
 import at.ac.fhcampuswien.fhmdb.api.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
+import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
@@ -14,6 +16,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -56,11 +60,13 @@ public class HomeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try
         {
-       observableMovies.addAll(MovieAPI.getAllMovies());
+            observableMovies.addAll(MovieAPI.getAllMovies());
         }
-        catch(Exception e)
+        catch(MovieApiException e)
         {
-            System.err.println(e.getMessage());
+            String errorMessage = "An Error Occurred While Loading Movies";
+            Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
+            alert.showAndWait();
             observableMovies.addAll(Movie.initializeMovies());
         }
         // add dummy data to observable list
@@ -109,7 +115,14 @@ public class HomeController implements Initializable {
             releaseyearComboBox.setValue(null);
             ratingComboBox.setValue(null);
             observableMovies.clear();
-            observableMovies.addAll(MovieAPI.getAllMovies());
+            //observableMovies.addAll(MovieAPI.getAllMovies());
+            try {
+                observableMovies.addAll(MovieAPI.getAllMovies());
+            } catch (MovieApiException e) {
+                String errorMessage = "An Error Occurred While Loading Movies";
+                Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
+                alert.showAndWait();
+            }
             sortBtn.setText("Sort");
         });
 
@@ -125,7 +138,9 @@ public class HomeController implements Initializable {
             String rating = (ratingComboBox.getValue() != null) ? ratingComboBox.getValue().toString() : null;
 
 
+
             filterMoviesAPI(observableMovies, searchField.getText(), (Genre) genreComboBox.getValue(),releaseYear,rating);
+
 
             //stick with the sorting order selected before
             if(sortBtn.getText().equals("Sort (asc)")) {
@@ -143,9 +158,10 @@ public class HomeController implements Initializable {
         {
             try {
                 watchlistRepository.addToWatchlist(transformMovieToMovieEntity((Movie)clickedItem));
-
-            }catch(Exception e) {
-                e.printStackTrace();
+            } catch(DatabaseException e) {
+                String errorMessage = "An Error Occurred. Cannot Add Movie To Watchlist.";
+                Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
+                alert.showAndWait();
             }
         }
 
@@ -255,14 +271,17 @@ public class HomeController implements Initializable {
         allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
     }
 
-    public void filterMoviesAPI(ObservableList<Movie> movies, String searchText, Genre genre, String releaseYear, String rating)
-    {
-        if(movies != null)
-        {
-            movies.addAll(MovieAPI.getAllMovies(searchText, genre, releaseYear, rating));
-        }
-        else {
-            throw new NullPointerException("List is null!");
+    public void filterMoviesAPI(ObservableList<Movie> movies, String searchText, Genre genre, String releaseYear, String rating) {
+        try {
+            if (movies != null) {
+                movies.addAll(MovieAPI.getAllMovies(searchText, genre, releaseYear, rating));
+            } else {
+                throw new NullPointerException("List is null!");
+            }
+        }catch (MovieApiException e){
+            String errorMessage = "An Error Occurred While Loading Movies. Try Again Later";
+            Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
+            alert.showAndWait();
         }
     }
 
