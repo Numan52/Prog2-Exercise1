@@ -28,8 +28,10 @@ public class MovieCell extends ListCell<Movie> {
     private  final Label directors = new Label();
     private final Label rating = new Label();
 
+    private final Button ShowDetailsButton = new Button("Show Details");
+
     private final VBox details = new VBox(releaseYear,lengthInMinutes,directors,rating);
-    private final VBox layout = new VBox(title, description, genres, addmoviebutton);
+    private final VBox layout = new VBox(title, description, genres, addmoviebutton, ShowDetailsButton);
 
 
     public MovieCell(ClickEventHandler addToWatchlistClicked) {
@@ -99,4 +101,5 @@ public class MovieCell extends ListCell<Movie> {
 
         }
     }
+
 }
