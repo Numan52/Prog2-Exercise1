@@ -35,7 +35,12 @@ public class WatchlistRepository {
 
     public void addToWatchlist(WatchlistMovieEntity movie) throws DatabaseException {
         try {
-            watchlistMovieDao.create(movie);
+            if (!getAll().contains(movie))
+            {
+                watchlistMovieDao.create(movie);
+                return;
+            }
+            System.out.println("Already in Watchlist");
         } catch (SQLException e) {
             throw new DatabaseException();
         }

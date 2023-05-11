@@ -153,7 +153,6 @@ public class HomeController implements Initializable {
     }
     private final ClickEventHandler onAddToWatchlistClicked = (clickedItem) ->
     {
-        System.out.println(clickedItem.toString());
         if(clickedItem instanceof Movie)
         {
             try {

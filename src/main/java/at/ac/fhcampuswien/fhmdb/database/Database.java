@@ -32,18 +32,11 @@ public class Database {
         }
     }
 
-    /*public void testDB() throws SQLException {
-        WatchlistMovieEntity movie = new WatchlistMovieEntity("a","b","c", Arrays.asList(Genre.THRILLER, Genre.ACTION),2015,"url",10,2.2);
-        watchlistMovieDao.create(movie);
-    }*/
-
-
     public static Database getDatabase()
     {
         if(instance == null)
         {
             instance = new Database();
-            System.out.println("created");
         }
         return instance;
     }
@@ -64,6 +57,7 @@ public class Database {
         }
 
     }
+
     public ConnectionSource getConnectionSource() {
         return connectionSource;
     }
@@ -71,4 +65,5 @@ public class Database {
     public Dao<WatchlistMovieEntity, Long> getWatchlistMovieDao() {
         return watchlistMovieDao;
     }
+
 }

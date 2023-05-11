@@ -5,6 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @DatabaseTable(tableName = "movie")
@@ -53,5 +54,15 @@ public class WatchlistMovieEntity {
                     .collect(Collectors.joining(","));
         }
        return null;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof WatchlistMovieEntity)
+        {
+            WatchlistMovieEntity movie = (WatchlistMovieEntity) obj;
+            return Objects.equals(movie.apiId, this.apiId);
+        }
+        return super.equals(obj);
     }
 }

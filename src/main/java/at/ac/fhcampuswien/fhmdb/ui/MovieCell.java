@@ -31,7 +31,7 @@ public class MovieCell extends ListCell<Movie> {
     private final Button ShowDetailsButton = new Button("Show Details");
 
     private final VBox details = new VBox(releaseYear,lengthInMinutes,directors,rating);
-    private final VBox layout = new VBox(title, description, genres, addmoviebutton, ShowDetailsButton);
+    private final VBox layout = new VBox(title, description, genres, addmoviebutton);
 
 
     public MovieCell(ClickEventHandler addToWatchlistClicked) {
