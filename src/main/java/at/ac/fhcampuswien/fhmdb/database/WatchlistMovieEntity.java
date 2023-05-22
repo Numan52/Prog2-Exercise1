@@ -3,7 +3,6 @@ package at.ac.fhcampuswien.fhmdb.database;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

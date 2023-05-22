@@ -27,7 +27,7 @@ public class MovieAPI{
         return parseJsonToMovie(makeRequest(createURL(null,null,null,null,id)));
     }
 
-    private static List<Movie> parseJsonToMovieList(String responseBody)
+    private static List<Movie> parseJsonToMovieList(String responseBody) throws MovieApiException
     {
         try{
             Gson gson = new Gson();
@@ -36,7 +36,7 @@ public class MovieAPI{
         } catch (Exception e)
         {
             System.err.println("Problem by parsing Json into Movielist: " + e.getMessage());
-            return null;
+            throw new MovieApiException(e.getMessage());
         }
     }
     private static Movie parseJsonToMovie(String responseBody) throws MovieApiException
@@ -46,9 +46,8 @@ public class MovieAPI{
             return gson.fromJson(responseBody, Movie.class);
         } catch (Exception e)
         {
-            //System.err.println("Problem by parsing Json into Movie-Object: " + e.getMessage());
+            System.err.println("Problem by parsing Json into Movie-Object: " + e.getMessage());
             throw new MovieApiException(e.getMessage());
-            //return null;
         }
     }
 
@@ -62,15 +61,11 @@ public class MovieAPI{
         }
         catch (Exception e){
             throw new MovieApiException(e.getMessage());
-            //System.err.println(e.getMessage());
-
         }
-        //return null;
     }
 
-    /*
-    creates the URL to request the movie data based on selection from the drop-down list
-     */
+
+    //creates the URL to request the movie data based on selection from UI
     private static String createURL(String query, Genre genre, String releaseYear, String ratingFrom, String id)
     {
         StringBuilder newURL = new StringBuilder();
@@ -99,9 +94,7 @@ public class MovieAPI{
         if(id != null && !id.isBlank())
         {
             newURL.append("/").append(id);
-
         }
         return newURL.toString();
     }
-
 }

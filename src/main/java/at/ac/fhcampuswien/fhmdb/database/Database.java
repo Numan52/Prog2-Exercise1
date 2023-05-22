@@ -1,7 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
 import at.ac.fhcampuswien.fhmdb.exceptions.DatabaseException;
-import at.ac.fhcampuswien.fhmdb.models.Genre;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -9,8 +8,6 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.util.Arrays;
 
 public class Database {
     public static final String DB_URL = "jdbc:h2:file: ./db/watchlistmoviesdb";
