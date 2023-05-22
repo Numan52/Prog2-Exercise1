@@ -23,6 +23,39 @@ public class WatchlistMovieEntity {
     private String genres;
     @DatabaseField
     private int releaseYear;
+
+    public String getGenres() {
+        return genres;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public String getApiId() {
+        return apiId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
     @DatabaseField
     private String imgUrl;
     @DatabaseField

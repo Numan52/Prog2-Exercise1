@@ -10,6 +10,7 @@ import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.ui.WatchlistMovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -41,10 +42,20 @@ public class WatchlistController implements Initializable {
     public JFXButton returnBtn;
 
     public WatchlistRepository watchlistRepository = new WatchlistRepository();
-    private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    private final ObservableList<WatchlistMovieEntity> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        try {
+            observableMovies.addAll(watchlistRepository.getAll());
+        } catch (DatabaseException e) {
+            throw new RuntimeException(e);
+        }
+        movieListView.setItems(observableMovies);   // set data of observable list to list view
+        movieListView.setCellFactory(movieListView -> new WatchlistMovieCell(removeFromWatchlist)); // use custom cell factory to display data
+
+
         returnBtn.setOnAction(actionEvent -> {
             FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("home-view.fxml"));
             Scene scene = null;
@@ -61,6 +72,24 @@ public class WatchlistController implements Initializable {
         });
 
     }
+    private final ClickEventHandler removeFromWatchlist = (clickedItem) ->
+    {
+        if(clickedItem instanceof WatchlistMovieEntity)
+        {
+            try {
+                watchlistRepository.removeFromWatchlist(((WatchlistMovieEntity)clickedItem));
+                observableMovies.clear();
+                observableMovies.addAll(watchlistRepository.getAll());
+
+            } catch(DatabaseException e) {
+                String errorMessage = "An Error Occurred. Cannot Add Movie To Watchlist.";
+                Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
+                alert.showAndWait();
+            }
+        }
+
+    };
+
 
 
 }
