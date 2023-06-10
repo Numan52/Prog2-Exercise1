@@ -41,7 +41,7 @@ public class WatchlistController implements Initializable {
     public VBox vBox;
     public JFXButton returnBtn;
 
-    public WatchlistRepository watchlistRepository = new WatchlistRepository();
+    public WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
     private final ObservableList<WatchlistMovieEntity> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override

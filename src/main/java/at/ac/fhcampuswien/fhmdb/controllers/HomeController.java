@@ -59,7 +59,7 @@ public class HomeController implements Initializable {
 
     public JFXButton watchlistBtn;
     public List<Movie> allMovies = Movie.initializeMovies();
-    public WatchlistRepository watchlistRepository = new WatchlistRepository();
+    public WatchlistRepository watchlistRepository = WatchlistRepository.getInstance();
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     private SortContext sortContext = new SortContext();

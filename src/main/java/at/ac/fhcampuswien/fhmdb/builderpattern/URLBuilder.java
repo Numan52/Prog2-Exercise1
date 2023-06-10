@@ -16,11 +16,6 @@ public class URLBuilder {
     {
         this.base = base;
     }
-    public URLBuilder setBase(String base) {
-        this.base = base;
-        return this;
-    }
-
     public URLBuilder setPath(String path) {
         this.path = path;
         return this;

@@ -6,12 +6,18 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class WatchlistRepository {
+    private static WatchlistRepository instance;
     public Dao<WatchlistMovieEntity, Long> watchlistMovieDao;
-    public WatchlistRepository()
-    {
+    private WatchlistRepository() {
         watchlistMovieDao = Database.getDatabase().getWatchlistMovieDao();
     }
 
+    public static WatchlistRepository getInstance() {
+        if (instance == null) {
+            instance = new WatchlistRepository();
+        }
+        return instance;
+    }
     public void removeFromWatchlist(WatchlistMovieEntity movie) throws DatabaseException {
         try {
             if (getAll().contains(movie))
