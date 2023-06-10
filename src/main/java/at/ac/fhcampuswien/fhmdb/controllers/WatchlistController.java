@@ -9,6 +9,7 @@ import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.observerpattern.Observer;
 import at.ac.fhcampuswien.fhmdb.patterns.MyFactory;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.WatchlistMovieCell;
@@ -34,7 +35,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WatchlistController implements Initializable {
+public class WatchlistController implements Initializable, Observer {
 
     @FXML
     public JFXListView movieListView;
@@ -47,7 +48,7 @@ public class WatchlistController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        watchlistRepository.addObserver(this);
         try {
             loadmovies();
         } catch (DatabaseException e) {
@@ -66,6 +67,7 @@ public class WatchlistController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            watchlistRepository.removeObserver(this);
             Stage stage = (Stage)vBox.getScene().getWindow();
             scene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
             stage.setTitle("FHMDb");
@@ -96,5 +98,9 @@ public class WatchlistController implements Initializable {
     }
 
 
-
+    @Override
+    public void update(String message) {
+        Alert alert = new Alert(Alert.AlertType.NONE, message, ButtonType.OK);
+        alert.showAndWait();
+    }
 }

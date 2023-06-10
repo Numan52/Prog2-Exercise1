@@ -28,6 +28,7 @@ public class WatchlistRepository implements Observable {
             if (getAll().contains(movie))
             {
                 watchlistMovieDao.delete(movie);
+                notifyObservers("Removed '" + movie.getTitle() + "' from Watchlist!");
             }
         } catch (SQLException e) {
             throw new DatabaseException();

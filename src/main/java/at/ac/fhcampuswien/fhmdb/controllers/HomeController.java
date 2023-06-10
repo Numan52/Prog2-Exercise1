@@ -127,7 +127,6 @@ public class HomeController implements Initializable, Observer {
             ratingComboBox.setValue(null);
             observableMovies.clear();
             sortContext.setSortState(new DefaultSortState());
-            //observableMovies.addAll(MovieAPI.getAllMovies());
             try {
                 observableMovies.addAll(MovieAPI.getAllMovies());
             } catch (MovieApiException e) {
