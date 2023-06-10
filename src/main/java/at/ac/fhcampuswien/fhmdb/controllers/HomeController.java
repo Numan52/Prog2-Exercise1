@@ -9,6 +9,7 @@ import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.observerpattern.Observer;
 import at.ac.fhcampuswien.fhmdb.patterns.AscendingSortState;
 import at.ac.fhcampuswien.fhmdb.patterns.DefaultSortState;
 import at.ac.fhcampuswien.fhmdb.patterns.DescendingSortState;
@@ -37,7 +38,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class HomeController implements Initializable {
+public class HomeController implements Initializable, Observer {
     @FXML
     public JFXButton searchBtn;
     @FXML
@@ -64,9 +65,10 @@ public class HomeController implements Initializable {
 
     private SortContext sortContext = new SortContext();
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        watchlistRepository.addObserver(this);
+
         try
         {
             observableMovies.addAll(MovieAPI.getAllMovies());
@@ -164,6 +166,7 @@ public class HomeController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            watchlistRepository.removeObserver(this);
             Stage stage = (Stage)vBox.getScene().getWindow();
             scene.getStylesheets().add(Objects.requireNonNull(FhmdbApplication.class.getResource("styles.css")).toExternalForm());
             stage.setTitle("Watchlist");
@@ -288,4 +291,9 @@ public class HomeController implements Initializable {
         }
     }
 
+    @Override
+    public void update(String message) {
+        Alert alert = new Alert(Alert.AlertType.NONE, message, ButtonType.OK);
+        alert.showAndWait();
+    }
 }
