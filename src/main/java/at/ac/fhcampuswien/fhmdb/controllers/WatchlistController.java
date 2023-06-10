@@ -9,6 +9,7 @@ import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.patterns.MyFactory;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.WatchlistMovieCell;
 import com.jfoenix.controls.JFXButton;
@@ -58,6 +59,7 @@ public class WatchlistController implements Initializable {
 
         returnBtn.setOnAction(actionEvent -> {
             FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("home-view.fxml"));
+            fxmlLoader.setControllerFactory(MyFactory.getInstance());
             Scene scene = null;
             try {
                 scene = new Scene(fxmlLoader.load(), 890, 620);
