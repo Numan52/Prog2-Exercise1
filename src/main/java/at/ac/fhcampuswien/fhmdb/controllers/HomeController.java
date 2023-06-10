@@ -9,6 +9,10 @@ import at.ac.fhcampuswien.fhmdb.exceptions.MovieApiException;
 import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.patterns.AscendingSortState;
+import at.ac.fhcampuswien.fhmdb.patterns.DefaultSortState;
+import at.ac.fhcampuswien.fhmdb.patterns.DescendingSortState;
+import at.ac.fhcampuswien.fhmdb.patterns.SortContext;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import at.ac.fhcampuswien.fhmdb.ui.UIAlerts;
 import com.jfoenix.controls.JFXButton;
@@ -58,6 +62,9 @@ public class HomeController implements Initializable {
     public WatchlistRepository watchlistRepository = new WatchlistRepository();
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
+    private SortContext sortContext = new SortContext();
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try
@@ -99,11 +106,13 @@ public class HomeController implements Initializable {
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)") || sortBtn.getText().equals("Sort")) {
                 //sort observableMovies ascending a-z
-                sortMoviesAscending(observableMovies);
+                sortContext.setSortState(new AscendingSortState());
+                sortContext.sortMovies(observableMovies);
                 sortBtn.setText("Sort (desc)");
             } else {
                 //sort observableMovies descending z-a
-                sortMoviesDescending(observableMovies);
+                sortContext.setSortState(new DescendingSortState());
+                sortContext.sortMovies(observableMovies);
                 sortBtn.setText("Sort (asc)");
             }
         });
@@ -121,7 +130,9 @@ public class HomeController implements Initializable {
             } catch (MovieApiException e) {
                 UIAlerts.errormessage("An Error Occurred While Loading Movies");
             }
+            sortContext.setSortState(new DefaultSortState());
             sortBtn.setText("Sort");
+
         });
 
         //Search Button:
@@ -141,11 +152,7 @@ public class HomeController implements Initializable {
 
 
             //stick with the sorting order selected before
-            if(sortBtn.getText().equals("Sort (asc)")) {
-                sortMoviesDescending(observableMovies);
-            } else if(sortBtn.getText().equals("Sort (desc)")){
-                sortMoviesAscending(observableMovies);
-            }
+            sortContext.sortMovies(observableMovies);
         });
 
         watchlistBtn.setOnAction(actionEvent -> {
@@ -264,22 +271,6 @@ public class HomeController implements Initializable {
         } else {
             throw new NullPointerException("List is null!");
         }
-    }
-
-    public void sortMoviesAscending(ObservableList<Movie> allMovies) {
-        if(allMovies == null)
-        {
-            throw new NullPointerException("List is null");
-        }
-        allMovies.sort(Comparator.comparing(Movie::getTitle));
-
-    }
-    public void sortMoviesDescending(ObservableList<Movie> allMovies) {
-        if(allMovies == null)
-        {
-            throw new NullPointerException("List is null");
-        }
-        allMovies.sort(Comparator.comparing(Movie::getTitle).reversed());
     }
 
     public void filterMoviesAPI(ObservableList<Movie> movies, String searchText, Genre genre, String releaseYear, String rating) {
