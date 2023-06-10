@@ -124,13 +124,14 @@ public class HomeController implements Initializable {
             releaseyearComboBox.setValue(null);
             ratingComboBox.setValue(null);
             observableMovies.clear();
+            sortContext.setSortState(new DefaultSortState());
             //observableMovies.addAll(MovieAPI.getAllMovies());
             try {
                 observableMovies.addAll(MovieAPI.getAllMovies());
             } catch (MovieApiException e) {
                 UIAlerts.errormessage("An Error Occurred While Loading Movies");
             }
-            sortContext.setSortState(new DefaultSortState());
+            sortContext.sortMovies(observableMovies);
             sortBtn.setText("Sort");
 
         });
