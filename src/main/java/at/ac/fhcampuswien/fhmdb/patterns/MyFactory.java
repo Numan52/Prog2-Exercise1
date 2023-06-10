@@ -9,8 +9,12 @@ public class MyFactory implements Callback<Class<?>, Object> {
     private Object controllerInstance;
     private static MyFactory instance;
 
+    /*Second Option: public static Object instance;
+    * in Object call -> if instance == null -> instance = .....
+    *                   else return instance!*/
 
-    public static MyFactory getInstance() {
+
+    public static MyFactory getInstance() { //MyFactor should only be instance one time
         if(instance == null)
         {
             instance = new MyFactory();
