@@ -48,7 +48,7 @@ public class WatchlistController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
-            observableMovies.addAll(watchlistRepository.getAll());
+            loadmovies();
         } catch (DatabaseException e) {
             throw new RuntimeException(e);
         }
@@ -78,8 +78,7 @@ public class WatchlistController implements Initializable {
         {
             try {
                 watchlistRepository.removeFromWatchlist(((WatchlistMovieEntity)clickedItem));
-                observableMovies.clear();
-                observableMovies.addAll(watchlistRepository.getAll());
+                loadmovies();
 
             } catch(DatabaseException e) {
                 String errorMessage = "An Error Occurred. Cannot Add Movie To Watchlist.";
@@ -89,6 +88,10 @@ public class WatchlistController implements Initializable {
         }
 
     };
+    public void loadmovies() throws DatabaseException {
+        observableMovies.clear();
+        observableMovies.addAll(watchlistRepository.getAll());
+    }
 
 
 

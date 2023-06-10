@@ -10,6 +10,7 @@ import at.ac.fhcampuswien.fhmdb.interfaces.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import at.ac.fhcampuswien.fhmdb.ui.UIAlerts;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -65,10 +66,8 @@ public class HomeController implements Initializable {
         }
         catch(MovieApiException e)
         {
-            String errorMessage = "An Error Occurred While Loading Movies";
-            Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
-            alert.showAndWait();
-            observableMovies.addAll(Movie.initializeMovies());
+            UIAlerts.errormessage("An Error Occurred While Loading Movies");
+            //observableMovies.addAll(Movie.initializeMovies());
         }
         // add dummy data to observable list
         // initialize UI stuff
@@ -120,9 +119,7 @@ public class HomeController implements Initializable {
             try {
                 observableMovies.addAll(MovieAPI.getAllMovies());
             } catch (MovieApiException e) {
-                String errorMessage = "An Error Occurred While Loading Movies";
-                Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
-                alert.showAndWait();
+                UIAlerts.errormessage("An Error Occurred While Loading Movies");
             }
             sortBtn.setText("Sort");
         });
@@ -175,9 +172,7 @@ public class HomeController implements Initializable {
             try {
                 watchlistRepository.addToWatchlist(transformMovieToMovieEntity((Movie)clickedItem));
             } catch(DatabaseException e) {
-                String errorMessage = "An Error Occurred. Cannot Add Movie To Watchlist.";
-                Alert alert = new Alert(Alert.AlertType.ERROR, errorMessage, ButtonType.OK);
-                alert.showAndWait();
+                UIAlerts.errormessage("An Error Occurred While Loading Movies");
             }
         }
 
