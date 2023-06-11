@@ -159,7 +159,7 @@ public class HomeController implements Initializable, Observer {
 
         watchlistBtn.setOnAction(actionEvent -> {
             FXMLLoader fxmlLoader = new FXMLLoader(FhmdbApplication.class.getResource("watchlist.fxml"));
-            Scene scene = null;
+            Scene scene;
             try {
                 scene = new Scene(fxmlLoader.load(), 890, 620);
             } catch (IOException e) {

@@ -5,6 +5,10 @@ import at.ac.fhcampuswien.fhmdb.models.Genre;
 import java.net.URL;
 import java.net.URLEncoder;
 
+    /*
+    Builder Pattern
+    sets the specified query parameters and builds the URL to send the request to
+    */
 public class URLBuilder {
     private String base;
     private String path;

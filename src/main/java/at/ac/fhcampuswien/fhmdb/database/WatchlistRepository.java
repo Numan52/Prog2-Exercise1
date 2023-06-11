@@ -17,7 +17,7 @@ public class WatchlistRepository implements Observable {
         observers = new ArrayList<>();
     }
 
-    public static WatchlistRepository getInstance() {
+    public static WatchlistRepository getInstance() { // Singleton Pattern : only one instance of WatchlistRepository allowed
         if (instance == null) {
             instance = new WatchlistRepository();
         }

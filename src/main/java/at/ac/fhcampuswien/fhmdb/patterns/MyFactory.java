@@ -14,7 +14,7 @@ public class MyFactory implements Callback<Class<?>, Object> {
     *                   else return instance!*/
 
 
-    public static MyFactory getInstance() { //MyFactor should only be instance one time
+    public static MyFactory getInstance() { // allows only 1 instance of MyFactory
         if(instance == null)
         {
             instance = new MyFactory();
