@@ -13,6 +13,9 @@ public class SortContext {
     }
 
     public void setSortState(SortState state) {
+        // decides how the movies will be sorted;
+        // for example:   sortContext.setSortState(new AscendingSortState());
+        //                sortContext.sortMovies(observableMovies);
         currentState = state;
     }
 
